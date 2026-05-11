@@ -1,0 +1,113 @@
+# Data Architect Report — DS_CCP_wired-output
+
+## Repository Nature
+
+DS_CCP_wired-output is an **SSIS execution project** — no database DDL, no stored procedure definitions, no table or index definitions. Its data architecture relevance is as the **consumer of WIRED DB objects** and the **producer of report file outputs**.
+
+## Database Objects — None Defined
+
+The repository contains:
+- 12 SSIS packages (`.dtsx` files, ranging from 1.4 KB to ~400 KB)
+- 1 project parameters file (`Project.params`)
+- 2 connection managers (`.conmgr`)
+- 1 project file (`wired-output.dtproj`)
+- 1 database reference file (`wired-output.database`)
+
+## Connection Managers — Analysis
+
+### `wired_db.conmgr`
+```xml
+ConnectionString="Data Source=d-phl-db01.wirecard.lan;Initial Catalog=WIRED;
+Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;"
+```
+- Target: `d-phl-db01.wirecard.lan` — Wirecard development server on Wirecard LAN
+- Authentication: Windows Integrated Security (SSPI)
+- **Development server hardcoded**: The `.wirecard.lan` domain is a Wirecard internal DNS domain. This connection manager targets the development environment. Production deployment relies on SSISDB environment override.
+- **`.wirecard.lan` DNS dependency**: This DNS suffix is likely no longer resolvable post-acquisition if Wirecard's internal DNS has been decommissioned or renamed.
+
+### `SMTP Connection Manager.conmgr`
+```xml
+DTS:ObjectName="SMTP Connection Manager"
+```
+- 425 bytes — minimal SMTP config
+- Used for email delivery of reports
+- Actual SMTP server details must be set via SSISDB environment
+
+## SSIS Package Inventory
+
+| Package | Size | Purpose |
+|---|---|---|
+| `wired_master_output.dtsx` | 8,855 bytes | Top-level orchestrator — Foreach loop over due subscriptions |
+| `call_report_packages.dtsx` | 59,952 bytes | Dispatch layer — calls individual report packages based on `ReportName` |
+| `report_template.dtsx` | ~large | Base/template package — shared logic for all report packages |
+| `rpt_Aggregate_Spending.dtsx` | ~large | Aggregate Spending report generation |
+| `rpt_Card_Ship_Date.dtsx` | ~large | Card Ship Date report generation |
+| `rpt_Program_Balance_Report.dtsx` | ~large | Programme Balance Report generation |
+| `rpt_Program_Balance_Report_Plus Fee.dtsx` | ~large | PBR Plus Fee variant |
+| `rpt_Rapid_Undeliverable_Cards_Report.dtsx` | ~large | RAPID Undeliverable Cards report |
+| `send_client_sftp.dtsx` | 1,388 bytes | Delivers report file to client SFTP server |
+| `send_wep.dtsx` | 7,307 bytes | Delivers report file to WEP SFTP portal |
+
+## Data Read by This Project — WIRED DB Objects
+
+Based on stored procedure analysis from DS_CCP_wired and package purpose:
+
+| WIRED DB Object | Access Type | Purpose |
+|---|---|---|
+| `dbo.report_requests` | SELECT | Read subscription config (report name, brand, format, delivery method, schedule) |
+| `dbo.report_schedule` | SELECT (via computed column) | Determine if subscription is due today |
+| `dbo.report_timeslot` | SELECT | Determine delivery time window |
+| `dbo.cache_pbr` | SELECT (via `rpt_ProgramBalanceReport`) | PBR report data |
+| `dbo.cache_pbr_GP` | SELECT | GP-sourced PBR data |
+| `dbo.cache_AggSpend` | SELECT | Aggregate spending data |
+| `dbo.cache_CardShipDate` | SELECT | Card ship date data |
+| `dbo.cache_RapidUndeliverableCards` | SELECT | Undeliverable card data |
+| `dbo.cache_corp_client_brands` | SELECT | Brand display name resolution |
+| `dbo.report_requests_log` | INSERT | Log execution result per subscription |
+| `dbo.rpt_ProgramBalanceReport` (SP) | EXECUTE | PBR data retrieval with parameters |
+| `dbo.rpt_validate_reportrequests` (SP) | EXECUTE | Pre-execution parameter validation |
+
+## Project Parameters — Sensitive Data Analysis
+
+From `Project.params` (partial read — 6,806 bytes):
+
+| Parameter | Default Value | Sensitive | Risk |
+|---|---|---|---|
+| `wep_directory` | `C:\ETL\Out\WEP` | No | Dev path — needs override |
+| `wep_sftp_hostname` | `sftp.amer1.wirecard.com` | No | Production Wirecard endpoint |
+| `wep_sftp_port` | `22` | No | Standard SFTP port |
+| `wep_sftp_username` | empty | No | Requires SSISDB env config |
+| SFTP password/key | (sensitive — not shown) | YES | SSISDB sensitive params |
+
+**`wep_sftp_hostname = 'sftp.amer1.wirecard.com'`**: This is a production-environment SFTP endpoint committed to the project as default. Unlike DS_CCP_wired-caching which defaulted to a QA endpoint, this defaults to what appears to be a production Wirecard endpoint. This means if deployed without SSISDB environment override, packages will attempt to deliver reports to the production Wirecard Americas SFTP. This could cause:
+- Production data delivery without proper SSISDB credential configuration (connection would fail without credentials — a safe failure)
+- But the endpoint itself being correct by default creates confusion about what "production" means in this project
+
+## Report Output File Data Classification
+
+Report files generated by this project contain:
+
+| Report Type | Data Content | PII/Sensitive |
+|---|---|---|
+| Programme Balance Report | Brand financial balances, GP reconciliation data, VCA names | Client confidential — financial data |
+| PBR Plus Fee | As above + fee schedule data | Client confidential |
+| Aggregate Spending | Spending aggregates by category, date range | Client confidential |
+| Card Ship Date | Card order fulfilment dates, quantities | Client operational data |
+| RAPID Undeliverable | Card counts by return reason, quantities | Client operational data |
+
+**No PAN, SSN, CVV, or individual cardholder data appears in these reports** — they are programme-level aggregates. Report files are delivered via SFTP (encrypted in transit) or email.
+
+## PCI DSS CDE Scope Assessment
+
+**DS_CCP_wired-output is outside CDE scope.** Report output files do not contain PANs or sensitive authentication data. The `wired_db.conmgr` connection to the WIRED database (which is also outside CDE scope) confirms no cardholder data flows through this project.
+
+However:
+- **`report_requests.DeliverySpecification`** may contain client SFTP credentials embedded as connection strings. These credentials are read at runtime and used to connect to client SFTP servers. The security of client SFTP credentials in WIRED DB is a concern (plaintext storage in `DeliverySpecification` column).
+- **Email delivery**: Email addresses read from `DeliverySpecification` are personal data (GDPR/CCPA). The SMTP connection transmits these to email servers; SMTP encryption (TLS/STARTTLS) should be verified.
+
+## Encryption Assessment
+
+- **WEP SFTP delivery** (`send_wep.dtsx`): SFTP uses SSH transport encryption — satisfies PCI DSS Req 4.2.1 for financial data in transit.
+- **Client SFTP delivery** (`send_client_sftp.dtsx`): Same as above.
+- **Email delivery**: SMTP encryption depends on SMTP server configuration — not verifiable from package parameters. Should use SMTPS or STARTTLS.
+- **Report files at rest** (in `C:\ETL\Out\WEP` staging directory): Stored unencrypted on ETL server filesystem between generation and delivery. Given no PAN data in files, this is acceptable but ideally files should be cleaned up immediately after successful delivery.
