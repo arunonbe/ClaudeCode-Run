@@ -1,4 +1,4 @@
-# Data Architect View — xsso_SVC
+﻿# Data Architect View — xsso_SVC
 
 ## Data Stores
 | Store | Type | Access | Notes |
@@ -95,7 +95,7 @@ Base64Coder.encode(encryptedBytes) → HTTP response body
 - No token revocation mechanism
 
 ## Compliance Gaps
-- **Default credentials in properties file:** `keystore.password=ecount`, `certificate.password=ecount` — PCI DSS Req 8.3.6 (change all vendor-supplied default credentials)
+- **Default credentials in properties file:** `keystore.password=[REDACTED — rotate immediately]`, `certificate.password=[REDACTED — rotate immediately]` — PCI DSS Req 8.3.6 (change all vendor-supplied default credentials)
 - **JKS files on filesystem (not HSM):** Private keys stored in files — not HSM-grade key protection; PCI DSS Req 3.7 requires key management procedures
 - **No token expiry enforcement:** A stolen valid token can be replayed indefinitely — violates principle of time-limited tokens
 - **`memberId` returned in plaintext HTTP response body:** Without TLS, memberId is exposed in transit

@@ -1,4 +1,4 @@
-# Business Analyst — wirecard_corporate-client-module_LIB
+﻿# Business Analyst — wirecard_corporate-client-module_LIB
 
 ## Business Purpose
 `corporate-client-module` (CCM) is a **Gen-2 corporate client lifecycle management microservice** for the Wirecard/Northlane issuing platform. It manages the onboarding, maintenance, and deactivation of **corporate clients** — businesses that operate prepaid card programs. It also manages their associated virtual clients, card programs, card issuance, fund loading/unloading, and brand assignments.
@@ -56,5 +56,5 @@
 ## Risks
 1. **`T_PIN` in `CORP_CONTACT`**: If this column stores a card or security PIN, it is Sensitive Authentication Data (SAD) prohibited from storage post-authorization by PCI DSS Req 3.2. Requires immediate clarification.
 2. **DATE_OF_BIRTH stored for contacts**: PII requiring data minimisation review under GDPR.
-3. **Hardcoded QA credentials in `application.yml`**: `ccp.client.password: aaaa1111`, `cmm.client.password: aaaa1111`, `iss-auth.client.password: aaaa1111`.
+3. **Hardcoded QA credentials in `application.yml`**: `ccp.client.password: [REDACTED — rotate immediately]`, `cmm.client.password: [REDACTED — rotate immediately]`, `iss-auth.client.password: [REDACTED — rotate immediately]`.
 4. **No fund transfer rollback**: If a load/unload operation partially fails (CCP succeeds, card issuance fails), no compensating transaction is visible in the codebase.

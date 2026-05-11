@@ -1,4 +1,4 @@
-# accounting-workflow_WAPP — Data Architect View
+﻿# accounting-workflow_WAPP — Data Architect View
 
 ## Data Stores
 
@@ -44,7 +44,7 @@ The C# client interacts exclusively via stored procedures. The following tables/
 | Data Category | Location | Risk |
 |---|---|---|
 | **Application username / password (plaintext)** | `Login.cs` line 106: `pwd.Value = PasswordTextBox.Text.Trim()` passed as `SqlDbType.VarChar(256)` to SP | Password transmitted in cleartext to SQL Server over the network |
-| **Database credentials (hardcoded)** | `SQLData.cs` lines 34 and 56: `User Id=raf;Pwd=none` embedded in source and compiled into binary | Extractable by any user who can run `strings` on the EXE |
+| **Database credentials (hardcoded)** | `SQLData.cs` lines 34 and 56: `User Id=raf;Pwd=[REDACTED — rotate immediately]` embedded in source and compiled into binary | Extractable by any user who can run `strings` on the EXE |
 | **Session ID (VARCHAR 50)** | Stored in `MDIParent1.sid`; passed on every SP call as `@s_id` | Session fixation/hijacking possible if token predictable or reused |
 | **User display name, email** | Returned from `sys_user @action='detail'`; bound directly to `DataSet` in memory | No explicit scrubbing on form close |
 | **Cardholder Liability account balances** | `liab.xml` seeds `Cardholder_Liability (id=13)` and `Other_Customer_Liability (id=21)` with sample balances; live balances fetched from `AcctgWf` via `sys_wp` | Cardholder float/liability is reconciled within the application |
@@ -59,7 +59,7 @@ The C# client interacts exclusively via stored procedures. The following tables/
 
 | Area | Status |
 |---|---|
-| SQL connection encryption (TLS) | Not configured in client. Connection string uses `Server=<IP>;Database=...;User Id=raf;Pwd=none` with no `Encrypt=true` or `TrustServerCertificate` flag. Wire encryption is unknown and likely absent. |
+| SQL connection encryption (TLS) | Not configured in client. Connection string uses `Server=<IP>;Database=...;User Id=raf;Pwd=[REDACTED — rotate immediately]` with no `Encrypt=true` or `TrustServerCertificate` flag. Wire encryption is unknown and likely absent. |
 | Password hashing | SHA512 hashing code is **commented out** throughout `Login.cs` (lines 93–138 contain multiple commented `SHA512Managed` snippets). Passwords are sent and presumably stored without hashing. |
 | Document files | No encryption; files are plain filesystem objects. Sign-off sets `FileAttributes.ReadOnly` on the file (`TaskDoc.cs` line 675) — this is access-control via OS attribute, not encryption. |
 | Application manifest code signing | `AccountingWorkflow.csproj` line 16 references `AccountingWorkflow_TemporaryKey.pfx` with `SignManifests=false` — **manifest signing is disabled**. |

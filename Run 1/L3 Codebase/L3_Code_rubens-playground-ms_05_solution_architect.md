@@ -1,4 +1,4 @@
-# Solution Architect Analysis: rubens-playground-ms
+﻿# Solution Architect Analysis: rubens-playground-ms
 
 ## Technical Architecture
 - **Framework**: Spring Boot (via `nexpay-parent:0.1.10-SNAPSHOT`); Spring MVC (WebMVC, not reactive)
@@ -72,7 +72,7 @@ Defined in `ordersapi.yml` (OpenAPI 3.1.1):
 ### Secrets Management
 - `SENDGRID_API_KEY` is injected via environment variable — correct pattern.
 - `DB_PASSWORD` via environment variable — correct pattern.
-- docker-compose default values (`DB_PASSWORD=postgres`) are insecure defaults for non-local environments.
+- docker-compose default values (`DB_PASSWORD=[REDACTED — rotate immediately]`) are insecure defaults for non-local environments.
 
 ### Input Validation
 - Bean validation on `CreateOrderRequest` via `@Valid` and Jakarta constraint annotations.
@@ -100,7 +100,7 @@ Defined in `ordersapi.yml` (OpenAPI 3.1.1):
 6. **No DOB encryption** in `Order.java`: `dateOfBirth` is a plain `LocalDate` column.
 7. **`springdoc-openapi-starter-webmvc-ui:3.0.0`**: Non-standard version number for springdoc.
 8. **`db/` directory not read**: Liquibase changelogs in `db/` were not analysed; SQL DDL may contain additional sensitive column definitions or missing indexes.
-9. **`docker-compose.yml` default credentials**: `DB_PASSWORD=postgres` as a default in compose file.
+9. **`docker-compose.yml` default credentials**: `DB_PASSWORD=[REDACTED — rotate immediately]` as a default in compose file.
 10. **`network_mode: host`** in docker-compose: Not suitable for production.
 
 ## Gen-3 Promotion Requirements (Sandbox to Production)
@@ -120,6 +120,6 @@ Defined in `ordersapi.yml` (OpenAPI 3.1.1):
 - `Order.java:43-74` — `toString()` includes `dateOfBirth`, `firstName`, `lastName`, `email`, `primaryPhone`, `mobilePhone`, `address1`, `address2`, `postalCode`; all will appear in DEBUG logs.
 - `OrdersApiDelegateImpl.java:119,123,127` — `log.debug("createOrderRequest:", ...)`, `log.debug("order:", ...)`, `log.debug("savedOrder:", ...)` — PII in debug.
 - `AppProperties.java:29-31` — `@DefaultValue` exposes the Azure Container Apps URL in compiled code — acceptable for non-secret URLs.
-- `docker-compose.yml:18` — `SENDGRID_API_KEY=${SENDGRID_API_KEY}` — no default (good); but `DB_PASSWORD=postgres` default on line 28 is insecure.
+- `docker-compose.yml:18` — `SENDGRID_API_KEY=${SENDGRID_API_KEY}` — no default (good); but `DB_PASSWORD=[REDACTED — rotate immediately]` default on line 28 is insecure.
 - `pom.xml:103-107` — `spring-boot-devtools` with `scope=runtime` — must be made `optional=true` to prevent inclusion in production JAR.
 - `OrdersApiDelegateImpl.java:138-145` — `DataIntegrityViolationException` caught and re-thrown (correct behaviour); generic `Exception` caught at line 141 and wrapped as `OrderCreationException` — may mask unexpected errors.

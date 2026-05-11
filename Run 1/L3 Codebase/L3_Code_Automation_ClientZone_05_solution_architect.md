@@ -1,4 +1,4 @@
-# Automation_ClientZone — Solution Architect View
+﻿# Automation_ClientZone — Solution Architect View
 
 ## Technical Architecture
 
@@ -100,9 +100,9 @@ Queries in `SearchableAddendaSteps.java` exercise the following logical API:
 
 2. **Plaintext sensitive data in source-controlled JSON** (`mypaymentvault.json`): 12+ card numbers with corresponding CVV values, SSN `987654321`, DOB `06-04-1985`, bank account number `7835676345435`, routing number `021000021`, PINs. Severity: **High** (PCI DSS, GLBA, CCPA implications).
 
-3. **Real employee email + password** (`clientzone.json`): `bhagyashree.bijagarni@onbe.com` with password `Bhagy@nandache131` stored in source code. If this is an actual Onbe employee's password (vs. a QA-only account), this is a credential leak. Severity: **High**.
+3. **Real employee email + password** (`clientzone.json`): `bhagyashree.bijagarni@onbe.com` with password `[REDACTED — rotate immediately]` stored in source code. If this is an actual Onbe employee's password (vs. a QA-only account), this is a credential leak. Severity: **High**.
 
-4. **Hardcoded credentials in step definitions** (`SSLoginSteps.java` lines 148, 170–172): Username `"Bhagyashree"`, password `"Passcode2"` hardcoded as string literals — not parameterized through the test data layer. Severity: **Medium**.
+4. **Hardcoded credentials in step definitions** (`SSLoginSteps.java` lines 148, 170–172): Username `"Bhagyashree"`, password `"[REDACTED — rotate immediately]"` hardcoded as string literals — not parameterized through the test data layer. Severity: **Medium**.
 
 5. **SQL injection risk** (`SearchableAddendaSteps.java`): All SQL queries are constructed via string concatenation using `AddendaValue` and `ProgramId` parameters. Example at line 207: `"WHERE addenda.value in('" + AddendaValue + "')"`. Although these values originate from Cucumber step parameters (not user input), the pattern is unsafe and should use `PreparedStatement`. Severity: **Medium** (code quality / pattern risk).
 

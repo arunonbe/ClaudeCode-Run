@@ -1,4 +1,4 @@
-# Data Architect Report — nexpay-cardprocessor-svc
+﻿# Data Architect Report — nexpay-cardprocessor-svc
 
 ## 1. Data Architecture Overview
 
@@ -62,7 +62,7 @@ The `ScopeResolver` documentation reveals a `secret_ref_` prefix convention: con
   "key_vault_references": {
     "spring.datasource.url": "card-proc-svc-pg-connection-string",
     "processor.fis.uatusername": "fis-uat-username",
-    "processor.fis.uatpassword": "fis-uat-password",
+    "processor.fis.uatpassword": "[REDACTED — rotate immediately]",
     "processor.fis.uatcertificate": "fis-cert-base64",
     "processor.thredd.uatclientid": "thredd-uat-clientid",
     "processor.thredd.uatclientsecret": "thredd-uat-clientsecret"

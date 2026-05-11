@@ -1,4 +1,4 @@
-# Business Analyst — wirecard_funds-transfer-coordinator_LIB
+﻿# Business Analyst — wirecard_funds-transfer-coordinator_LIB
 
 ## Business Purpose
 The Funds Transfer Coordinator (FTC) is a Spring Boot microservice that orchestrates the disbursement of funds from corporate prepaid/virtual accounts to recipients via multiple payment rails. It acts as the business-rule engine sitting between event producers (CCP, card-authorisation, overdraft, client-file) and downstream payment-execution agents (check-agent, NAM-bank-agent, wire-transfer-agent).
@@ -55,7 +55,7 @@ The Funds Transfer Coordinator (FTC) is a Spring Boot microservice that orchestr
 - Sensitive fields: CLIENT_EMAIL, VIRTUAL_CLIENT_KEY, CUSTOMER_ID stored in Oracle; no PAN/SAD fields observed
 
 ## Risks
-- Hardcoded QA credentials in application.yml (`password: aaaa1111`, `callcenter_QA`) — must not reach production config
+- Hardcoded QA credentials in application.yml (`password: [REDACTED — rotate immediately]`, `callcenter_QA`) — must not reach production config
 - CCP client URL contains hostname (`q-horust-app02.wirecard.sys`) in source — environment-specific overrides required
 - `h2-console` enabled in base application.yml — if promoted to production without environment profile override, exposes in-memory DB
 - EventHub ActiveMQ password `local` / `local` in base YAML — test-only placeholder

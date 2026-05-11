@@ -103,7 +103,7 @@ This section represents the most critical DevOps finding across the estate. The 
 | D04 | scheduler_WAPP | 4 SQL Server DB passwords (`b2cstage`) | `scheduler-service/.env` lines 7–14; `.env-dev` lines 8–15 | Direct access to 4 production-adjacent DBs | P0 |
 | D04 | manage-payment-rest-api | Live Visa payment credentials | `dapr-components/dapr-secrets.json` | Payment rail compromise | P0 |
 | D07 | mailgun-event-tracker | Mailgun API key (`[REDACTED — rotate immediately]`) | `application.properties` line 18 | Send email as Onbe; read all events | P0 |
-| D07 | mailgun-event-tracker | DB credentials (`b2ctest`/`b2ctest`) | `application.properties` lines 5–6 | NotificationSvc DB access | P0 |
+| D07 | mailgun-event-tracker | DB credentials (`[REDACTED — rotate immediately]`/`[REDACTED — rotate immediately]`) | `application.properties` lines 5–6 | NotificationSvc DB access | P0 |
 | D09 | stand-in-processing-api | Azure App Configuration full connection key | `.env` file | All SASI runtime config compromised | P0 |
 | D12 | docker-logstash_INFRA_CONT | Logstash TLS server private key | `pki/server.key` (committed + baked into Docker image) | Decrypt all mTLS Filebeat sessions; MITM log pipeline | P0 |
 | D13 | wirecard_sg-bank-agent_LIB | CIMB Bank SFTP RSA private key | `application.yml` lines 34–61 | Unauthorized SFTP access to CIMB Bank SG | P0 |
@@ -114,8 +114,8 @@ This section represents the most critical DevOps finding across the estate. The 
 | D13 | cross-border-transfer-service_SVC | JKS keystore | `config/server.jks` | TLS private key exposure | P1 |
 | D13 | wirecard_mobile-payout-citi_LIB | Android release keystore | `android/app/keystore/payoutnam_release.keystore` | Sign malicious APKs as Onbe "PayoutNAM" | P0 |
 | D13 | wirecard_test-utilities_LIB | PGP private key (0x6392B27D-sec.asc) | `src/main/resources/pgp/` (in published JAR) | Key distributed to all Maven consumers | P0 |
-| D13 | wirecard_funds-transfer-coordinator_LIB | CCP password (`aaaa1111`) | `application.yml` line 143 | CCP payment system access | P1 |
-| D13 | wirecard_check-agent_LIB | CCP password (`aaaa1111`) | `application.yml` | CCP payment system access | P1 |
+| D13 | wirecard_funds-transfer-coordinator_LIB | CCP password (`[REDACTED — rotate immediately]`) | `application.yml` line 143 | CCP payment system access | P1 |
+| D13 | wirecard_check-agent_LIB | CCP password (`[REDACTED — rotate immediately]`) | `application.yml` | CCP payment system access | P1 |
 | D05 | actimize-kyc_LIB | Hardcoded `secure_code='Prepaid1'` | Three SQL files | KYC/CIP authentication bypass | P1 |
 | D05 | strongbox-remote-client_LIB | Plaintext HTTP transport for RSA/AES/PGP key delivery | `service.default.properties` (`http://ecappdev:8080/...`) | In-transit key interception | P1 |
 | D05 | xsso_SVC | Keystore passwords in properties files | repo properties files | SSO keystore compromise | P1 |

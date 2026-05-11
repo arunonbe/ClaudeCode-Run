@@ -61,7 +61,7 @@ with:
 | Cambridge partner signature | `application.yml:191` | `BwiVUg-UoXZfWoNSkwBFrjeoU4QZiCS-AOowiqpN78w` | **Cambridge API credential in source** |
 | Cambridge client signatures | `application.yml:196,201,208,213` | `4fe39fc5...` / `0fd32305...` | **Cambridge API credentials in source** |
 | Cambridge client IDs | `application.yml:193,200` | `252648_API_User`, `252650_API_User` | API user identifiers in source |
-| SFTP credentials | `application.yml:319-324` | `username: wirecard / password: FxDMahi4TU` | **SFTP credentials in source** |
+| SFTP credentials | `application.yml:319-324` | `username: wirecard / password: [REDACTED — rotate immediately]` | **SFTP credentials in source** |
 | PGP passphrase | `application.yml:329` | `passphrase: wirecard` | **PGP key passphrase in source** |
 | PGP key files | `application.yml:330-331` | `/pgp/0x6392B27D-pub.asc` / `-sec.asc` | PGP key file paths in config |
 | H2 console | `application.yml:13-16` | `enabled: true` | **H2 console enabled — must be disabled in production** |
@@ -73,7 +73,7 @@ with:
 1. Config server password (`s3cr3t`)
 2. Application credential (`[REDACTED — rotate immediately]` / `6k50WLp...`)
 3. Cambridge API signatures (partner + 2 client signatures)
-4. SFTP credentials (`wirecard`/`FxDMahi4TU`)
+4. SFTP credentials (`wirecard`/`[REDACTED — rotate immediately]`)
 5. PGP passphrase (`wirecard`)
 
 All must be rotated and externalised to Spring Cloud Config + Vault before production deployment. The `bootstrap.yml` config server password would normally be the entry point for all other secrets — but it is hardcoded here.

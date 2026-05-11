@@ -1,4 +1,4 @@
-# Solution Architect View — exemplar-database_WAPP
+﻿# Solution Architect View — exemplar-database_WAPP
 
 ## Technical Summary
 
@@ -20,14 +20,14 @@ This repository contains 7 files across two deployment contexts. There is no com
 
 ### VULN-1: Hardcoded SA Password (CRITICAL)
 **File**: `local/docker-compose.yml` lines 24–25 and `local/db-configure.sh` line 9  
-**Detail**: The SA password `B00t1ful` is committed in plaintext to version control. Any developer or CI/CD runner with access to this repository can extract this credential. Although this is an exemplar repo, teams copying this pattern may inadvertently replicate the pattern.  
+**Detail**: The SA password `[REDACTED — rotate immediately]` is committed in plaintext to version control. Any developer or CI/CD runner with access to this repository can extract this credential. Although this is an exemplar repo, teams copying this pattern may inadvertently replicate the pattern.  
 **PCI DSS**: Violates Requirement 8.3.1 (user authentication management).  
 **Remediation**: Replace with Docker secrets or environment variable injection from a secrets manager. Use `${SA_PASSWORD}` resolved from Azure Key Vault or HashiCorp Vault at deploy time.  
 **Priority**: P1 — Fix before this pattern is used as basis for any production or CDE-adjacent service.
 
 ### VULN-2: Hardcoded AKS Admin Password (CRITICAL)
 **File**: `aks/create-database.sh` line 3  
-**Detail**: `export password=B00t1ful` commits the Azure SQL admin password to version control.  
+**Detail**: `export password=[REDACTED — rotate immediately]` commits the Azure SQL admin password to version control.  
 **Remediation**: Use `az keyvault secret show` to retrieve at runtime, or use Azure Managed Identity with Azure AD authentication (passwordless).  
 **Priority**: P1.
 

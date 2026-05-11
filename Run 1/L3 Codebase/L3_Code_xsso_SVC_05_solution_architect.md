@@ -1,4 +1,4 @@
-# Solution Architect View — xsso_SVC
+﻿# Solution Architect View — xsso_SVC
 
 ## Technical Architecture
 - **Language:** Java 21; Lombok `@Slf4j` throughout
@@ -59,8 +59,8 @@
 ### Secrets Management — Critical Finding
 `applicationContext-xSSO.properties` (committed to source control):
 ```
-keystore.password=ecount
-certificate.password=ecount
+keystore.password=[REDACTED — rotate immediately]
+certificate.password=[REDACTED — rotate immediately]
 ```
 These passwords protect the RSA private keys for every affiliate. If this default values file is used in any non-development environment, all affiliate private keys are accessible to anyone with the repository access.
 
@@ -98,7 +98,7 @@ Additionally:
 ## Technical Debt
 | Item | Severity | Detail |
 |---|---|---|
-| Default credentials in properties | Critical | `keystore.password=ecount`, `certificate.password=ecount` in committed file |
+| Default credentials in properties | Critical | `keystore.password=[REDACTED — rotate immediately]`, `certificate.password=[REDACTED — rotate immediately]` in committed file |
 | Hardcoded IV in DESedeFactory | Critical | `"12345678".getBytes()` at `DESedeFactory.java:38` |
 | PKCS#1 v1.5 RSA padding | High | Bleichenbacher-vulnerable; replace with OAEP |
 | No token expiry | High | Replay attacks possible with captured tokens |
@@ -130,7 +130,7 @@ Additionally:
 | Risk | File:Line | Detail |
 |---|---|---|
 | Hardcoded IV | `DESedeFactory.java:38` | `return "12345678".getBytes()` — fixed 3DES IV |
-| Default keystore passwords | `applicationContext-xSSO.properties:9-10` | `keystore.password=ecount`, `certificate.password=ecount` |
+| Default keystore passwords | `applicationContext-xSSO.properties:9-10` | `keystore.password=[REDACTED — rotate immediately]`, `certificate.password=[REDACTED — rotate immediately]` |
 | PKCS#1 v1.5 RSA | `SSOTokenHandler.java:37` | `algorithmModePadding = "RSA/ECB/PKCS1PADDING"` |
 | No auth on any servlet | `web.xml:39-84` | No `<security-constraint>` for any servlet mapping |
 | XStream without type allowlist | `TokenManagerServlet.java:29-38` | `new XStream()` with alias-only config; no class allowlist |

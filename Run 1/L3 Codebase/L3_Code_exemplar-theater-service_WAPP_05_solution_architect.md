@@ -1,4 +1,4 @@
-# Solution Architect View — exemplar-theater-service_WAPP
+﻿# Solution Architect View — exemplar-theater-service_WAPP
 
 ## Complete Class/Method Inventory
 
@@ -115,7 +115,7 @@
 
 ### VULN-1: Hardcoded Credentials in application.yml (CRITICAL)
 **File**: `theater-service-config/src/main/resources/application.yml` lines 11–14 and 44  
-**Detail**: Plaintext credentials: `credentials.username`, `credentials.password`, `datasource.password: B00t1ful`. These are committed to version control.  
+**Detail**: Plaintext credentials: `credentials.username`, `credentials.password`, `datasource.password: [REDACTED — rotate immediately]`. These are committed to version control.  
 **Remediation**: Replace with Spring Cloud Config Server external properties or Azure Key Vault references.  
 **Priority**: P1.
 

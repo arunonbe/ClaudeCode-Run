@@ -67,7 +67,7 @@ The `Email` domain object (`Email.java`) tracks:
 
 1. **Hardcoded Mailgun API Key** (`application.properties` line 18): The Mailgun private API key (`[REDACTED — rotate immediately]`) is committed to the source repository in plaintext. This is a critical security finding — if this key is live, it must be rotated immediately. Any party with the key can send emails on behalf of `mail.mypaymentvault.com` and access all Mailgun event data.
 
-2. **Hardcoded database credentials** (`application.properties` lines 5–6): `username=b2ctest`, `password=b2ctest` for the `NotificationSvc` database. Test credentials in source code.
+2. **Hardcoded database credentials** (`application.properties` lines 5–6): `username=b2ctest`, `password=[REDACTED — rotate immediately]` for the `NotificationSvc` database. Test credentials in source code.
 
 3. **Only "not yet processed" records**: The reader only fetches `last_job_run IS NULL`. Records that fail processing will have `last_job_run` set and will not be retried — there is no error/retry state management.
 

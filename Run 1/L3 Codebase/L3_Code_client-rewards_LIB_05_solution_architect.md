@@ -1,4 +1,4 @@
-# client-rewards_LIB — Solution Architect View
+﻿# client-rewards_LIB — Solution Architect View
 
 ## Technical Architecture
 
@@ -107,7 +107,7 @@ public interface IExpireRecordService {
   - `database=cbaseapp_jdbc`
   - `member_id = {AE6BBCC6-52DD-41E9-9298-A270BEC19DE3}` (GUID used as caller identity for JobSvc)
   - `director.address=http://ECIFLEXAPPDEV/service/dispatch.asp` (unencrypted HTTP)
-- The commented-out `DriverManagerDataSource` bean in `applicationContext.xml` contains hardcoded credentials (`b2ctest`/`b2ctest`) — these were not deleted, only commented.
+- The commented-out `DriverManagerDataSource` bean in `applicationContext.xml` contains hardcoded credentials (`[REDACTED — rotate immediately]`/`[REDACTED — rotate immediately]`) — these were not deleted, only commented.
 
 ### Transport Security
 - Director service is called over **plain HTTP** (`http://ECIFLEXAPPDEV/...`).

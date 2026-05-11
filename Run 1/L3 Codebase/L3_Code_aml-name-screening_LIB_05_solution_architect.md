@@ -1,4 +1,4 @@
-# aml-name-screening_LIB — Solution Architect View
+﻿# aml-name-screening_LIB — Solution Architect View
 
 ## Technical Architecture
 
@@ -58,7 +58,7 @@ No REST endpoints, no gRPC, no messaging consumers, no JMX MBeans.
    - Fix required: Use `PreparedStatement` with parameterized LIKE patterns.
 
 2. **Hardcoded Credentials (Critical)**
-   - `NameScreeningConstants.java` lines 25–26: `USERNAME = "report"`, `PASSWORD = "r3p0rt1ng"` committed to VCS.
+   - `NameScreeningConstants.java` lines 25–26: `USERNAME = "report"`, `PASSWORD = "[REDACTED — rotate immediately]"` committed to VCS.
    - `.mvn/wrapper/settings.xml` lines 38–51: Plaintext passwords for Nexus (`dwil15?`), ecount.release (`d3v0nly`), ecount.snapshot (`d3v0nly`) committed to VCS.
    - These violate PCI DSS Requirement 8.3.6 and constitute secrets-in-code.
 

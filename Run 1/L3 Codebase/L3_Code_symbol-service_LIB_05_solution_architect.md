@@ -1,4 +1,4 @@
-# Solution Architect View — symbol-service_LIB
+﻿# Solution Architect View — symbol-service_LIB
 
 ## Technical Architecture
 Two-module Maven library:
@@ -38,7 +38,7 @@ Not applicable — library; security is enforced by the consuming application.
 Not applicable — reference data only.
 
 ### Secrets Management
-- Test datasource credentials (`b2ctest`/`b2ctest`) hardcoded in `applicationContext-symbol-datasource.xml` (test resources).
+- Test datasource credentials (`[REDACTED — rotate immediately]`/`[REDACTED — rotate immediately]`) hardcoded in `applicationContext-symbol-datasource.xml` (test resources).
 - Production DataSource is injected by the consuming application — no secrets in this library's main source.
 
 ### Known CVEs

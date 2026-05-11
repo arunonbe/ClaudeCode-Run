@@ -106,6 +106,6 @@ mailgun.api.key=[REDACTED — rotate immediately]
 - Reading all Mailgun event data for that domain
 - Accessing stored message content via the Mailgun Store Messages API
 
-Additionally, `application.properties` lines 5–6 contain `username=b2ctest` / `password=b2ctest` — database credentials in source control.
+Additionally, `application.properties` lines 5–6 contain `username=b2ctest` / `password=[REDACTED — rotate immediately]` — database credentials in source control.
 
 **Immediate action required**: Rotate the Mailgun API key; remove credentials from source files; use environment variables or Azure Key Vault / Dapr secret store injection.

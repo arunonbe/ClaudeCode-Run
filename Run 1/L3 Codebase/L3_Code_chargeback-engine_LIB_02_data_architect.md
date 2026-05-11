@@ -1,4 +1,4 @@
-# chargeback-engine_LIB — Data Architect View
+﻿# chargeback-engine_LIB — Data Architect View
 
 ## Data Stores
 
@@ -103,7 +103,7 @@ Data originates in the Reporting/Vendor database (chargeback cases to process), 
 
 | Gap | Regulation | Detail |
 |---|---|---|
-| Plaintext credentials in source control | PCI DSS v4.0.1 Req 8.3, Req 6.3 | `ods.password=ECOUNT` in `ChargebackProcess.properties`; multiple passwords in `settings.xml` |
+| Plaintext credentials in source control | PCI DSS v4.0.1 Req 8.3, Req 6.3 | `ods.password=[REDACTED — rotate immediately]` in `ChargebackProcess.properties`; multiple passwords in `settings.xml` |
 | No parameterised queries | PCI DSS v4.0.1 Req 6.2 (secure coding) | All stored-procedure calls built via string concatenation |
 | ODS transport encryption not enforced | PCI DSS v4.0.1 Req 4.2 | JDBC-ODBC bridge with no TLS configuration |
 | No audit trail of chargeback lifecycle events | Reg E §205.11, PCI DSS Req 10 | The library logs to a rolling file but no structured audit record is written to a database |

@@ -1,4 +1,4 @@
-# Business Analyst View — exemplar-database_WAPP
+﻿# Business Analyst View — exemplar-database_WAPP
 
 ## Repository Overview
 
@@ -49,4 +49,4 @@ The three database names (`Theater`, `Customer`, `diiadministration`) correspond
 
 ## Compliance Notes
 
-The `local/docker-compose.yml` (line 9) contains a hardcoded SA password (`B00t1ful`) and the AKS script (`aks/create-database.sh` line 3) likewise uses a hardcoded admin password. These are development/exemplar credentials. Any production deployment must substitute these with secrets managed via Azure Key Vault or equivalent secrets management, consistent with PCI DSS Requirement 8 (Identify users and authenticate access to system components). The firewall rule in `create-database.sh` (lines 27–34) opens access from `0.0.0.0` to `223.255.255.255`, which is extremely permissive and not acceptable for production environments.
+The `local/docker-compose.yml` (line 9) contains a hardcoded SA password (`[REDACTED — rotate immediately]`) and the AKS script (`aks/create-database.sh` line 3) likewise uses a hardcoded admin password. These are development/exemplar credentials. Any production deployment must substitute these with secrets managed via Azure Key Vault or equivalent secrets management, consistent with PCI DSS Requirement 8 (Identify users and authenticate access to system components). The firewall rule in `create-database.sh` (lines 27–34) opens access from `0.0.0.0` to `223.255.255.255`, which is extremely permissive and not acceptable for production environments.

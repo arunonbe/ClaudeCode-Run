@@ -1,4 +1,4 @@
-# Data Architect View — manage-payment-rest-api
+﻿# Data Architect View — manage-payment-rest-api
 
 ## Overview
 
@@ -123,7 +123,7 @@ This is a sophisticated, extensible validation architecture that is well-suited 
 
 ```json
 {
-  "managepaymentapi-ordersvcdb-password": "Ord3rS3rv1cE",
+  "managepaymentapi-ordersvcdb-password": "[REDACTED — rotate immediately]",
   "managepaymentapi-securityservice-visakey": "VVG8CPATV43C511XKDN013ALopepi6j4SvofpaIUlrV-kuQBQ",
   "managepaymentapi-securityservice-visasharedsecret": "u@wiGsudTR8-R5PfKQnkTNVhJSDBto$MmT43krYq"
 }

@@ -1,4 +1,4 @@
-# Solution Architect — wirecard_corporate-client-module_LIB
+﻿# Solution Architect — wirecard_corporate-client-module_LIB
 
 ## Technical Architecture
 
@@ -67,9 +67,9 @@ Content types: `application/vnd.wirecard.issuing+json;version=1` and XML variant
 
 ### Secrets
 - `application.yml` QA credentials (must not reach production):
-  - `ccp.client.password: aaaa1111`
-  - `cmm.client.password: aaaa1111`
-  - `iss-auth.client.password: aaaa1111`
+  - `ccp.client.password: [REDACTED — rotate immediately]`
+  - `cmm.client.password: [REDACTED — rotate immediately]`
+  - `iss-auth.client.password: [REDACTED — rotate immediately]`
 - Truststore content: Base64-encoded in environment config — same risk as `check-agent`.
 
 ### Known CVEs / EOL
@@ -101,9 +101,9 @@ Largely identical to `check-agent` plus:
 
 | File | Line | Risk |
 |---|---|---|
-| `corporate-client-module-config/src/main/resources/application.yml` | 69–70 | `ccp.client.password: aaaa1111` — QA credential committed |
-| `corporate-client-module-config/src/main/resources/application.yml` | 93–94 | `cmm.client.password: aaaa1111` — QA credential committed |
-| `corporate-client-module-config/src/main/resources/application.yml` | 108–109 | `iss-auth.client.password: aaaa1111` — QA credential committed |
+| `corporate-client-module-config/src/main/resources/application.yml` | 69–70 | `ccp.client.password: [REDACTED — rotate immediately]` — QA credential committed |
+| `corporate-client-module-config/src/main/resources/application.yml` | 93–94 | `cmm.client.password: [REDACTED — rotate immediately]` — QA credential committed |
+| `corporate-client-module-config/src/main/resources/application.yml` | 108–109 | `iss-auth.client.password: [REDACTED — rotate immediately]` — QA credential committed |
 | `corporate-client-module-db-scripts/.../db.changelog-1.0.xml` | `CORP_CONTACT.T_PIN` | `T_PIN VARCHAR2(16)` — potential SAD/PIN storage without encryption |
 | `corporate-client-module-db-scripts/.../db.changelog-1.0.xml` | `CORP_CONTACT.DATE_OF_BIRTH` | DOB stored without column encryption |
 | `corporate-client-module-rest-controller/.../CorporateClientController.java` | 96 | `x-username` header used for audit trail — bypasses authentication; can be spoofed |

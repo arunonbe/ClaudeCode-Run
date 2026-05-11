@@ -1,4 +1,4 @@
-# Business Analyst View — xsso_SVC
+﻿# Business Analyst View — xsso_SVC
 
 ## Business Purpose
 xSSO SVC is the Gen-1 Single Sign-On (SSO) service for the eCount/Onbe prepaid card platform. It provides RSA-based token encryption/decryption services that allow partner applications and internal One Platform systems to authenticate cardholders without requiring them to log in again. It acts as the cryptographic gateway for cross-application SSO token exchange.
@@ -53,7 +53,7 @@ xSSO SVC is the Gen-1 Single Sign-On (SSO) service for the eCount/Onbe prepaid c
 - Affiliate-specific RSA keypairs stored in JKS files on the filesystem — key management is critical (PCI DSS Req 3.7)
 - PUID resolution involves querying the JobSvc database — in scope for cardholder data environment (CDE)
 - Timestamp-only validation (no expiry window) means a valid token is reusable indefinitely after issuance — replay attack risk
-- `keystore.password = ecount` and `certificate.password = ecount` in the default properties file — weak/default credentials
+- `keystore.password = [REDACTED — rotate immediately]` and `certificate.password = [REDACTED — rotate immediately]` in the default properties file — weak/default credentials
 
 ## Risks
 - Default keystore and certificate passwords (`ecount`/`ecount`) committed in properties file — critical credential exposure if not overridden in all environments

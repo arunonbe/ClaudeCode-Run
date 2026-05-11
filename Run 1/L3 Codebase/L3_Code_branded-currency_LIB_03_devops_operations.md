@@ -1,4 +1,4 @@
-# branded-currency_LIB — DevOps & Operations View
+﻿# branded-currency_LIB — DevOps & Operations View
 
 ## Build & Packaging
 
@@ -57,10 +57,10 @@ Tests are skipped during the standard build (documented in `README.md` and GitHu
 **Critical finding**: `brandedCurrencyTestContext.xml` contains a hardcoded production-like SQL Server connection string and credentials:
 ```xml
 <property name="url"><value>jdbc:jtds:sqlserver://ppamwdcdifsql1.nam.nsroot.net:2232/cbaseapp</value></property>
-<property name="username"><value>b2ctest</value></property>
-<property name="password"><value>b2ctest</value></property>
+<property name="username"><value>[REDACTED — rotate immediately]</value></property>
+<property name="password"><value>[REDACTED — rotate immediately]</value></property>
 ```
-These credentials are committed to the repository in plaintext. The commented-out block above also references `ecsqldev1:1433/cbaseapp` with credentials `andrewc/andrewc`.
+These credentials are committed to the repository in plaintext. The commented-out block above also references `ecsqldev1:1433/cbaseapp` with credentials `[REDACTED — rotate immediately]/[REDACTED — rotate immediately]`.
 
 ### Maven Settings
 - `.mvn/wrapper/settings.xml` configures:

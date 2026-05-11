@@ -1,4 +1,4 @@
-# Data Architect View — FDRReports_LIB
+﻿# Data Architect View — FDRReports_LIB
 
 ## Technology Stack
 
@@ -18,7 +18,7 @@ The application reads fixed-width text files in FDR's RMS28 format. Files are ob
 ## Target Database Schema
 
 **Database**: `ECNT` (Microsoft Dynamics GP database, hosted on Great Plains SQL Server)  
-**Connection pattern**: `Server=<server>\<instance>; Database=ECNT; User ID=gplain; Password=Ecount99!`
+**Connection pattern**: `Server=<server>\<instance>; Database=ECNT; User ID=gplain; Password=[REDACTED — rotate immediately]`
 
 The data is loaded into DataTable structures in memory, then bulk-inserted into the `ECNT` database. The exact target table names for each report type are determined at runtime from the `Banker.dbo.SSISJobConfigurations` table XML parameters.
 
@@ -76,4 +76,4 @@ The application deliberately processes UAT first, then production (`FDRReports.c
 | `AccountNumber` | DD-441 Detail | HIGH | DDA/account reference — confirm whether full account number |
 | `MemID` | CD-523, CD-025, CD-525 | MEDIUM | Member identifier — linked to cardholder identity |
 | `TransID` | CD-523, CD-025, CD-525 | MEDIUM | Transaction identifier — part of card transaction audit trail |
-| DB Password | `FDRReports.cs` lines 413, 418 | CRITICAL | Hardcoded in source code: `Password=Ecount99!` and `Password=r3p0rt1ng` |
+| DB Password | `FDRReports.cs` lines 413, 418 | CRITICAL | Hardcoded in source code: `Password=[REDACTED — rotate immediately]` and `Password=[REDACTED — rotate immediately]` |

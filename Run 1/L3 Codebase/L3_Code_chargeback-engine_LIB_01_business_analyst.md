@@ -1,4 +1,4 @@
-# chargeback-engine_LIB — Business Analyst View
+﻿# chargeback-engine_LIB — Business Analyst View
 
 ## Business Purpose
 
@@ -94,7 +94,7 @@ chargeback_process_end <process_id>, 2|3  (Reporting DB)
 - **Error resolution comment**: The account comment `"No authorization chargeback: <description>"` is the only cardholder-facing artefact produced here. If this comment is the sole record of dispute initiation, it is insufficient for the 10-business-day investigation window documentation required under Reg E.
 
 ### PCI DSS
-- **Credentials in plaintext**: `ChargebackProcess.properties` (lines 13-14) contains `ods.username=CBASEAPP` and `ods.password=ECOUNT` in cleartext. This is a direct PCI DSS v4.0.1 Requirement 8 violation (protect individual authentication credentials).
+- **Credentials in plaintext**: `ChargebackProcess.properties` (lines 13-14) contains `ods.username=CBASEAPP` and `ods.password=[REDACTED — rotate immediately]` in cleartext. This is a direct PCI DSS v4.0.1 Requirement 8 violation (protect individual authentication credentials).
 - **Additional credentials in settings.xml**: `.mvn/wrapper/settings.xml` (lines 37-50) contains hardcoded plaintext passwords for Nexus and ecount release repositories (`acmng`, `dwil15?`, `d3v0nly`). These are checked into source control.
 - **DDA number in SQL string**: `dda_number` is passed directly into a stored-procedure call string. If DDA numbers are considered account data in scope for PCI DSS (applicable to prepaid products), this is relevant to CDE data-handling controls.
 - **No encryption of data in transit to ODS**: The ODS connection uses `sun.jdbc.odbc.JdbcOdbcDriver` with `jdbc:odbc:mcyc` — a local ODBC DSN — with no TLS configuration visible. Whether the underlying ODBC DSN encrypts the transport is externally managed and not auditable from this code.

@@ -1,4 +1,4 @@
-# Enterprise Architect View — FDRReports_LIB
+﻿# Enterprise Architect View — FDRReports_LIB
 
 ## Platform Generation and Role
 
@@ -65,7 +65,7 @@ This application represents significant PCI DSS compliance risk:
 
 1. **CardNumber in DD-441**: The presence of card number data (even truncated) in a .NET Framework 4.0 application with no encryption, no access controls, and hardcoded credentials is a PCI DSS scope expansion risk. The `ECNT` database and the servers running this application must be assessed as part of the CDE if card data is present.
 
-2. **Hardcoded credentials in source code** (`FDRReports.cs` lines 413, 418): `Password=Ecount99!` (production) and `Password=r3p0rt1ng` (UAT) are committed to version control. Anyone with access to this repository has production database credentials.
+2. **Hardcoded credentials in source code** (`FDRReports.cs` lines 413, 418): `Password=[REDACTED — rotate immediately]` (production) and `Password=[REDACTED — rotate immediately]` (UAT) are committed to version control. Anyone with access to this repository has production database credentials.
 
 3. **No TLS enforcement**: ADO.NET connections use `Integrated Security=False` with SQL Authentication — the default TLS behavior of SQL Server 2012-era installations may not enforce TLS 1.2+.
 

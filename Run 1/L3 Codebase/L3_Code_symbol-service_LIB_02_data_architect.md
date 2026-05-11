@@ -1,4 +1,4 @@
-# Data Architect View — symbol-service_LIB
+﻿# Data Architect View — symbol-service_LIB
 
 ## Data Stores
 | Store | Type | Description |
@@ -55,6 +55,6 @@ SQL Server (jobsvc_test / production symbol table)
 ## Compliance Gaps
 | Gap | Standard | Severity |
 |-----|----------|----------|
-| Hardcoded test credentials (`b2ctest`/`b2ctest`) in `applicationContext-symbol-datasource.xml` | PCI DSS Req 8 | High (test scope) |
+| Hardcoded test credentials (`[REDACTED — rotate immediately]`/`[REDACTED — rotate immediately]`) in `applicationContext-symbol-datasource.xml` | PCI DSS Req 8 | High (test scope) |
 | Hardcoded local config path (`d:/c-base/config/...`) in test datasource XML | Environment coupling | Medium |
 | No audit log for symbol create/update operations | PCI DSS Req 10 | Low (reference data) |

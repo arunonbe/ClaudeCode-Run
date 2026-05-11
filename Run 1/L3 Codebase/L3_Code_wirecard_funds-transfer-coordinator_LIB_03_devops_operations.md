@@ -1,4 +1,4 @@
-# DevOps / Operations — wirecard_funds-transfer-coordinator_LIB
+﻿# DevOps / Operations — wirecard_funds-transfer-coordinator_LIB
 
 ## Build System
 - **Tool**: Gradle 4.8 (wrapper), Java 8
@@ -62,7 +62,7 @@
 1. Spring Boot 2.0.7 is end-of-life; no longer receives security patches
 2. Gradle 4.8 / `gradle:4.8-jdk8` CI image is significantly outdated
 3. `h2-console` enabled in base application.yml — accidental production exposure risk
-4. ActiveMQ credentials `local/local` and CCP password `aaaa1111` in source YAML — require positive proof of environment-specific override
+4. ActiveMQ credentials `local/local` and CCP password `[REDACTED — rotate immediately]` in source YAML — require positive proof of environment-specific override
 5. Quartz cluster check-in interval 10 s with misfire threshold 60 s — misconfigured cluster node could fire duplicate transfers
 6. No dead-letter queue configuration observed for failed EventHub messages — silent event loss on processing failure
 7. REQUEST/RESPONSE columns in TRANSFER_REQUEST_LOG are VARCHAR(2048) — truncation risk for large API responses

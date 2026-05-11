@@ -1,4 +1,4 @@
-# Business Analyst Report — wirecard_test-utilities_LIB
+﻿# Business Analyst Report — wirecard_test-utilities_LIB
 
 ## Business Purpose
 
@@ -31,7 +31,7 @@ However, the library contains security risks (hardcoded credentials, committed p
 
 ## Business Rules in Code
 
-- `EmbeddedSftpServer` defaults to username `wirecard` and password `FxDMahi4TU` (hardcoded constants).
+- `EmbeddedSftpServer` defaults to username `wirecard` and password `[REDACTED — rotate immediately]` (hardcoded constants).
 - `TestUtils.buildAchOutFileBlockFiller()` generates a 94-character block of '9's — this is the NACHA ACH file block filler format (NACHA requires ACH files to be padded to multiples of 10 records using 9-filled lines).
 - Country and currency code validators enforce ISO 3166-1 alpha-2 and ISO 4217 standards in production validation.
 
@@ -42,7 +42,7 @@ However, the library contains security risks (hardcoded credentials, committed p
 
 ## Key Business Risks
 
-1. **Hardcoded SFTP credentials** (`wirecard` / `FxDMahi4TU`) in production main source code. If any production service accidentally references the embedded SFTP server, real SFTP servers are protected only by these known credentials.
+1. **Hardcoded SFTP credentials** (`wirecard` / `[REDACTED — rotate immediately]`) in production main source code. If any production service accidentally references the embedded SFTP server, real SFTP servers are protected only by these known credentials.
 2. **PGP private key in production main source** (`src/main/resources/pgp/0x6392B27D-sec.asc`). This key material is packaged into the production JAR and is accessible to anyone with the JAR.
 3. **PGP passphrase `wirecard` hardcoded in test** (`PGPUtilsTest.java:21`). If this passphrase is reused on production PGP keys, the private key is compromised.
 4. **RSA SFTP public key committed** (`sftp/id_test_rsa.pub`). Combined with the corresponding private key (which may exist elsewhere), this enables authentication to any SFTP server configured to trust this key.

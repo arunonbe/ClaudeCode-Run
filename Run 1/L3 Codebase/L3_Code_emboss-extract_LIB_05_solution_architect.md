@@ -1,4 +1,4 @@
-# 05 Solution Architect — emboss-extract_LIB
+﻿# 05 Solution Architect — emboss-extract_LIB
 
 ## All Classes and Methods
 
@@ -96,7 +96,7 @@ Interface defining the builder contract (implemented by `StaxEmbossExtractBuilde
 
 ### 2. Hardcoded Credentials in Source Control (P0 — PCI DSS Req 8.6.3)
 - **Location**: `src/conf/dev/embossContext.properties` lines 3–4 and `src/conf/prod/embossContext.properties` lines 3–4
-- **Credentials**: `username=andrewc`, `password=andrewc`
+- **Credentials**: `username=andrewc`, `password=[REDACTED — rotate immediately]`
 - **Description**: Database credentials are committed to the Git repository in plaintext. This violates PCI DSS Req 8.6.3 (no shared/group credentials) and is a supply-chain security risk.
 - **Remediation**: Remove all credential values from property files. Retrieve credentials at runtime from Azure Key Vault, AWS Secrets Manager, or Director.
 

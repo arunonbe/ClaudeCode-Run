@@ -96,7 +96,7 @@ All calls include `CMG-AccessToken` header:
 |-----------|---------------|------------|
 | REST API inbound | HTTP Basic auth (username/password in `application.yml`) | **Credentials in source — CRITICAL** |
 | Cambridge API outbound | Two-level token exchange (partner → client) via `CMG-AccessToken` | Token-based; credentials in source |
-| SFTP | Username/password (`wirecard`/`FxDMahi4TU` in `application.yml`) | **Credentials in source — CRITICAL** |
+| SFTP | Username/password (`wirecard`/`[REDACTED — rotate immediately]` in `application.yml`) | **Credentials in source — CRITICAL** |
 | SQL Server | Spring datasource config (credentials in Cloud Config — but bootstrap password hardcoded) | Partially externalised |
 | Config server | HTTP Basic (`application`/`s3cr3t`) | **Credentials in source — CRITICAL** |
 
@@ -112,7 +112,7 @@ All of the following are committed to `application.yml` or `bootstrap.yml`:
 | Cambridge RCCL one-time signature | `application.yml` | Line 196 |
 | Cambridge RCCL recurring signature | `application.yml` | Line 201 |
 | Cambridge Disney/NoRecurring signature | `application.yml` | Lines 208, 213 |
-| SFTP password `FxDMahi4TU` | `application.yml` | Lines 320, 324 |
+| SFTP password `[REDACTED — rotate immediately]` | `application.yml` | Lines 320, 324 |
 | PGP passphrase `wirecard` | `application.yml` | Line 329 |
 
 **All must be rotated immediately and removed from all git branches and history.**
@@ -195,10 +195,10 @@ This IS a Gen-3 service — it represents the current Onbe Gen-3 architectural t
 
 | Risk | File | Detail |
 |------|------|--------|
-| Config server password | `bootstrap.yml:6` | `password: s3cr3t` — if config server is compromised, all downstream secrets are exposed |
+| Config server password | `bootstrap.yml:6` | `password: [REDACTED — rotate immediately]` — if config server is compromised, all downstream secrets are exposed |
 | App auth credentials | `application.yml:7-9` | Long string credentials committed; must be rotated |
 | Cambridge partner signature | `application.yml:191` | `BwiVUg-UoXZfWoNSkwBFrjeoU4QZiCS-AOowiqpN78w` — API signing credential |
-| SFTP password | `application.yml:320,324` | `FxDMahi4TU` for both Cambridge and Ecount SFTP |
+| SFTP password | `application.yml:320,324` | `[REDACTED — rotate immediately]` for both Cambridge and Ecount SFTP |
 | PGP passphrase | `application.yml:329` | `wirecard` — PGP private key passphrase; enables decryption of all Cambridge files |
 | `automatic-rate-cancellation` reliability | `AutomaticRateCancellationConfig.java` | FX rate cancellation must be reliable; failure = financial loss (expired deals charged at market); no dead-letter queue or compensation mechanism visible |
 | Circuit breaker misconfiguration | `application.yml:95-97` | `failure-rate-threshold: 40` — circuit opens at 40% failure rate over 100 calls. For Cambridge (single external dependency), this may be too permissive in production |

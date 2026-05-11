@@ -1,4 +1,4 @@
-# Business Analyst Analysis — exemplar-cross-border-transfer-service_WAPP
+﻿# Business Analyst Analysis — exemplar-cross-border-transfer-service_WAPP
 
 ## Important Note: Partial Clone Limitation
 
@@ -84,7 +84,7 @@ Cross-border money transfers are subject to:
 | Partial clone — missing REST/service layers | Cannot fully assess business logic; reconciliation and AML checks may be in missing modules |
 | `automatic-rate-cancellation` batch | FX rate cancellation must be reliable; failure to cancel expired rates incurs financial cost |
 | Cambridge API dependency | Service availability depends on Cambridge uptime; circuit breaker (Resilience4j) is included in dependencies |
-| Hardcoded bootstrap credentials | `bootstrap.yml` contains `username: application / password: s3cr3t` for the config server (see Security section) |
+| Hardcoded bootstrap credentials | `bootstrap.yml` contains `username: application / password: [REDACTED — rotate immediately]` for the config server (see Security section) |
 
 ---
 

@@ -1,4 +1,4 @@
-# Data Architect View — nexpay-ordervalidator-svc
+﻿# Data Architect View — nexpay-ordervalidator-svc
 
 ## Data Architecture Summary
 
@@ -87,7 +87,7 @@ nexpay:
   r2dbc:
     username: sa
     url: r2dbc:mssql://sqlserver:1433/nexpay
-    password: 123
+    password: [REDACTED — rotate immediately]
     validation-query: "SELECT 222"
 ```
 

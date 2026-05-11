@@ -1,4 +1,4 @@
-# chargeback-engine_LIB — Solution Architect View
+﻿# chargeback-engine_LIB — Solution Architect View
 
 ## Technical Architecture
 
@@ -72,7 +72,7 @@ The repository name ends in `_LIB`, but no public API is defined beyond `Chargeb
    - No parameterised queries (`PreparedStatement`) are used anywhere.
 
 2. **Plaintext credentials in VCS** (`ChargebackProcess.properties` lines 13-14; `.mvn/wrapper/settings.xml` lines 37-50):
-   - ODS: `ods.username=CBASEAPP`, `ods.password=ECOUNT`
+   - ODS: `ods.username=CBASEAPP`, `ods.password=[REDACTED — rotate immediately]`
    - Nexus proxy: `acmng` / `acmng`
    - Nexus QA: `deployment` / `dwil15?`
    - ecount release: `deployment` / `d3v0nly`

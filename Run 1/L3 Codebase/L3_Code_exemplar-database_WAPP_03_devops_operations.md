@@ -1,4 +1,4 @@
-# DevOps / Operations View — exemplar-database_WAPP
+﻿# DevOps / Operations View — exemplar-database_WAPP
 
 ## Repository Classification
 
@@ -81,7 +81,7 @@ docker-compose down
 The Dockerfile health check provides automatic readiness detection. Alternatively, connect with SSMS:
 - Server: `exemplar-sqlserver.lvh.me,1433`
 - Authentication: SQL Server Authentication
-- Login: `SA` / Password: `B00t1ful`
+- Login: `SA` / Password: `[REDACTED — rotate immediately]`
 
 ### Log Review
 The `db-configure.sh` appends status messages to `./config.log` within the container. The health check grep (`grep -q "MSSQL CONFIG COMPLETE" ./config.log`) can be used to confirm successful initialization.
@@ -91,7 +91,7 @@ The `db-configure.sh` appends status messages to `./config.log` within the conta
 The absence of any CI/CD pipeline in this repository means:
 - No automated validation when shell scripts or SQL are changed.
 - No SAST (Static Application Security Testing) on the Dockerfile or scripts.
-- No automated credential scanning (the hardcoded `B00t1ful` password would not be caught by an automated gate).
+- No automated credential scanning (the hardcoded `[REDACTED — rotate immediately]` password would not be caught by an automated gate).
 
 **Recommendation**: Add a GitHub Actions workflow (consistent with the pattern in `exemplar-theater-service_WAPP/.github/workflows/codeql.yml`) that at minimum:
 1. Runs `hadolint` on the Dockerfile.

@@ -1,4 +1,4 @@
-# Solution Architect Report: scheduler_WAPP
+﻿# Solution Architect Report: scheduler_WAPP
 
 ## API Surface
 
@@ -22,10 +22,10 @@ URL pattern in `web.xml`: `*.service` routes to the Spring DispatcherServlet. `/
 ## Critical Vulnerabilities
 
 1. **Credentials committed to VCS** (`scheduler-service/.env`, lines 7–14 and `scheduler-service/.env-dev`, lines 8–15):
-   - `SCHDULERWAAP_CBASEAPPDB_PASSWORD=b2cstage`
-   - `SCHDULERWAAP_JOBSVCDB_PASSWORD=b2cstage`
-   - `SCHDULERWAAP_REQUESTDB_PASSWORD=b2cstage`
-   - `SCHDULERWAAP_ECOUNTDB_PASSWORD=b2cstage`
+   - `SCHDULERWAAP_CBASEAPPDB_PASSWORD=[REDACTED — rotate immediately]`
+   - `SCHDULERWAAP_JOBSVCDB_PASSWORD=[REDACTED — rotate immediately]`
+   - `SCHDULERWAAP_REQUESTDB_PASSWORD=[REDACTED — rotate immediately]`
+   - `SCHDULERWAAP_ECOUNTDB_PASSWORD=[REDACTED — rotate immediately]`
    - These are PCI DSS Requirement 8.3 violations (shared, default-like credentials committed to source control)
 
 2. **Unauthenticated schedule management endpoint** (`scheduler-service/src/main/webapp/WEB-INF/web.xml`, line 31–43):

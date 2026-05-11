@@ -1,4 +1,4 @@
-# accept-prechecks_API — Solution Architect View
+﻿# accept-prechecks_API — Solution Architect View
 
 ## Technical Architecture
 
@@ -149,7 +149,7 @@ To migrate this service to a Gen-3 cloud-native REST/JSON API on Azure:
 | `AcceptPrecheckServiceImpl.java` | 88–90, 95–97 | NPE: `matcher()` called before null check on `checkNumber`/`serialNumber` | High |
 | `AcceptPrecheckServiceImpl.java` | 167 | Float-to-int amount conversion precision loss | High |
 | `AcceptPrecheckServiceImpl.java` | 195–202 | Last-name validation returns `true` when `cz-lastname` absent from addenda — any name passes | High |
-| `server-config.wsdd` | 6 | `adminPassword=admin` in WSDD configuration | Medium |
+| `server-config.wsdd` | 6 | `adminPassword=[REDACTED — rotate immediately]` in WSDD configuration | Medium |
 | `AcceptPrecheckServiceImpl.java` | 82, 114, 150 | Hardcoded Citibank routing number `38791282` | Medium |
 | `JaxRpcAcceptPrecheckService.java` | 3, 17–23 | `javax.xml.rpc` import; `getWebApplicationContext()` called twice per request (lines 21–22) — redundant lookup | Medium |
 | `datasourceTestContext.xml` | 20–27 | Hardcoded QA database hostname and credentials in test config | Medium |

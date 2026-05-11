@@ -1,4 +1,4 @@
-# Business Analyst View — exemplar-customer-service_WAPP
+﻿# Business Analyst View — exemplar-customer-service_WAPP
 
 ## Business Purpose
 This repository is Onbe's reference architecture exemplar web application for a microservice. It demonstrates the canonical patterns, tooling choices, and structural conventions that development teams should follow when building new Gen-3 Spring Boot services at Onbe. It is explicitly a demo/template project, not a production business service.
@@ -29,7 +29,7 @@ This repository is Onbe's reference architecture exemplar web application for a 
 4. **Event Publish**: POST /pubsub/{topic} → PublishController → Dapr client → pub/sub broker (MQTT or equivalent).
 
 ## Compliance Considerations
-- The application.yml committed to source contains hardcoded credentials (`credentials.username`, `credentials.password`) and database passwords (`password: B00t1ful`). These must not appear in production configuration and represent a secrets-in-code violation under PCI DSS Requirement 8.
+- The application.yml committed to source contains hardcoded credentials (`credentials.username`, `credentials.password`) and database passwords (`password: [REDACTED — rotate immediately]`). These must not appear in production configuration and represent a secrets-in-code violation under PCI DSS Requirement 8.
 - H2 console is enabled in the committed config (`spring.h2.console.enabled: true`); this must be disabled or removed before any production-adjacent deployment.
 - TLS for the SQL Server data source is configurable and present in code (DataSourceConfiguration.java).
 - The Pact broker token (`emSbllw1wbfH-ZAFB-cD-Q`) is hardcoded in pom.xml; treat as a leaked secret.

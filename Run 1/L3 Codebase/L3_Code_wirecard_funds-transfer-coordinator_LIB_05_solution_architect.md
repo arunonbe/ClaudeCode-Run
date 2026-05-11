@@ -1,4 +1,4 @@
-# Solution Architect — wirecard_funds-transfer-coordinator_LIB
+﻿# Solution Architect — wirecard_funds-transfer-coordinator_LIB
 
 ## Technical Architecture
 - **Framework**: Spring Boot 2.0.7.RELEASE, Spring Cloud Finchley, Java 8
@@ -35,7 +35,7 @@ Auth: OAuth2 Bearer token validated against ISS Auth Server JWT key-set; `resour
 
 ### Secrets Management
 - Credentials in `application.yml` are development placeholders; production injection mechanism not visible in this repo (likely Puppet/Ansible `application.conf` overlay)
-- **Risk**: `password: aaaa1111`, `callcenter_QA` visible in source YAML — must confirm these do not reach production
+- **Risk**: `password: [REDACTED — rotate immediately]`, `callcenter_QA` visible in source YAML — must confirm these do not reach production
 
 ### Known CVEs (library-level risk)
 | Library | Version | Known Risk |
@@ -74,7 +74,7 @@ Auth: OAuth2 Bearer token validated against ISS Auth Server JWT key-set; `resour
 ## Code-Level Risks
 | File | Line | Risk |
 |---|---|---|
-| `funds-transfer-coordinator-config/src/main/resources/application.yml` | 143 | Hardcoded CCP password `aaaa1111` |
+| `funds-transfer-coordinator-config/src/main/resources/application.yml` | 143 | Hardcoded CCP password `[REDACTED — rotate immediately]` |
 | `funds-transfer-coordinator-config/src/main/resources/application.yml` | 157-159 | Check-agent TODO credentials |
 | `funds-transfer-coordinator-config/src/main/resources/application.yml` | 43-44 | H2 console enabled with path exposed |
 | `funds-transfer-coordinator-config/src/main/resources/application.yml` | 130-131 | ActiveMQ credentials `local/local` |

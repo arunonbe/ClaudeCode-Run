@@ -1,4 +1,4 @@
-# Data Architect View — exemplar-database_WAPP
+﻿# Data Architect View — exemplar-database_WAPP
 
 ## Data Stores Provisioned
 
@@ -23,7 +23,7 @@ Source: `local/db-setup.sql` lines 1–16 and `aks/create-database.sh` lines 17�
 
 This repository does **not** create any tables and therefore does not directly handle cardholder data, PAN, or any Sensitive Authentication Data (SAD). However, the following observations are relevant:
 
-1. **Hardcoded Credentials** (`local/docker-compose.yml` lines 9, 14, 24–25 and `aks/create-database.sh` lines 3, 6): The SA password `B00t1ful` and admin password `B00t1ful` are embedded in plaintext in version-controlled files. This violates PCI DSS Requirement 8.3 (protect individual non-consumer user authentication factors) and represents a credential leakage risk.
+1. **Hardcoded Credentials** (`local/docker-compose.yml` lines 9, 14, 24–25 and `aks/create-database.sh` lines 3, 6): The SA password `[REDACTED — rotate immediately]` and admin password `[REDACTED — rotate immediately]` are embedded in plaintext in version-controlled files. This violates PCI DSS Requirement 8.3 (protect individual non-consumer user authentication factors) and represents a credential leakage risk.
 
 2. **Firewall Rule Scope** (`aks/create-database.sh` lines 29–34): The firewall allows connections from `0.0.0.0` to `223.255.255.255`, which exposes the SQL Server to almost all internet IP addresses. This violates PCI DSS Requirement 1 (install and maintain network security controls).
 

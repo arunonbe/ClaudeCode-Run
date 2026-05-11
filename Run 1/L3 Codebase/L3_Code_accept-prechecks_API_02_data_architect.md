@@ -1,4 +1,4 @@
-# accept-prechecks_API — Data Architect View
+﻿# accept-prechecks_API — Data Architect View
 
 ## Data Stores
 
@@ -35,7 +35,7 @@ The `LastNameValidatorXSearch` class accesses `MemberInquiryValue.getLastName()`
 | `vendorId` | Vendor identifier | Request only; never stored or validated | Lower risk, but logged |
 | `amount` | Transaction amount (financial) | Request object, INFO log | Logged |
 | Azure App Config connection string | Secret / credential | `.env_bkp` line 4 — `Endpoint=https://as-app-configuration.azconfig.io;Id=AkPK;Secret=693k6US7...` | **Credential committed to repository in plaintext** |
-| Database credentials (UAT) | Secret | `.env_bkp` lines 14–19 — `username=b2cstage`, `password=b2cstage` for all three databases | **Credentials committed to repository** |
+| Database credentials (UAT) | Secret | `.env_bkp` lines 14–19 — `username=b2cstage`, `password=[REDACTED — rotate immediately]` for all three databases | **Credentials committed to repository** |
 | JWT Bearer token | Authentication secret | `QA.postman_environment.json` line 204 — full signed JWT token | **Token committed to test collection** |
 
 The `.env_bkp` file is tracked in the repository (present in the Glob output and readable). It contains UAT database URLs (`u-lis-db01.nam.wirecard.sys`, `u-lis-db02.nam.wirecard.sys`), usernames, passwords, and an Azure App Configuration connection string with its secret key.

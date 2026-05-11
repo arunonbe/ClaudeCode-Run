@@ -1,4 +1,4 @@
-# Data Architect Analysis — exemplar-cross-border-transfer-service_WAPP
+﻿# Data Architect Analysis — exemplar-cross-border-transfer-service_WAPP
 
 ## Partial Clone Limitation
 
@@ -130,5 +130,5 @@ EcountSftpCommonChannelConfig (upload to Onbe SFTP)
 2. **Cambridge API tokens** — `CMG-AccessToken` in HTTP headers; tokens should be short-lived and stored in a secrets manager, not in application properties.
 3. **Remitter/beneficiary data** — `RemitterRequest` and `BeneficiaryRequest` objects likely contain full name, address, and bank account data. These are Category 1 PII and must be encrypted at rest and in transit.
 4. **IBAN/SWIFT data** — Beneficiary bank data (IBAN, SWIFT, account numbers) is regulated financial data under Reg E and international payment rules. Retention and logging must be carefully controlled.
-5. **Bootstrap credentials** — `bootstrap.yml` line 5 contains `password: s3cr3t` for the Spring Cloud Config server. This is a development/example credential that must be replaced before production deployment and must not appear in logs.
+5. **Bootstrap credentials** — `bootstrap.yml` line 5 contains `password: [REDACTED — rotate immediately]` for the Spring Cloud Config server. This is a development/example credential that must be replaced before production deployment and must not appear in logs.
 6. **Automatic rate cancellation** — the `AutomaticRateCancellationRecord` entity holds FX deal IDs and expiry information. Failure to process this batch correctly results in financial loss (expired deals charged at market rates).

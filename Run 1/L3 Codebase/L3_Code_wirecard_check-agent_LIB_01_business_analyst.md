@@ -1,4 +1,4 @@
-# Business Analyst — wirecard_check-agent_LIB
+﻿# Business Analyst — wirecard_check-agent_LIB
 
 ## Business Purpose
 `check-agent` is a **Gen-2 payment disbursement microservice** for the Wirecard/Northlane issuing platform. It manages the full lifecycle of **paper check disbursements** issued to cardholders or beneficiaries. It orchestrates check creation, status tracking, voiding, reissuance, and event notification, integrating with the Wirecard CCP (Call Center Platform) for fund reservations and the Wirecard Brand Server for check template configuration.
@@ -49,4 +49,4 @@
 ## Risks
 1. EventHub notification failures are caught and logged as WARN without halting the transaction (`CheckServiceImpl.java:95–99`). A check can be created without the event being published, causing downstream systems to miss the notification.
 2. No compensation mechanism if the CCP fund reservation succeeds but the check DB insert fails — potential for orphaned reservations.
-3. Plaintext credentials in `application.yml` (QA environment): `ccp.client.password: aaaa1111`, `iss-auth-server` URL pointing to `wirecard.sys` internal hostnames. If this configuration is not properly overridden in production, it poses a security risk.
+3. Plaintext credentials in `application.yml` (QA environment): `ccp.client.password: [REDACTED — rotate immediately]`, `iss-auth-server` URL pointing to `wirecard.sys` internal hostnames. If this configuration is not properly overridden in production, it poses a security risk.

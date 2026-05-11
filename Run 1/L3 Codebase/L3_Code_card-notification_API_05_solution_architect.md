@@ -1,4 +1,4 @@
-# card-notification_API — Solution Architect View
+﻿# card-notification_API — Solution Architect View
 
 ## Technical Architecture
 
@@ -107,7 +107,7 @@ cardNotificationInquiry(CardNotificationRequest) -> CardNotificationResponse
 - No log masking or truncation of mobile numbers
 
 ### Known Hardcoded Secret
-- `server-config.wsdd` line 5: `<parameter name="adminPassword" value="admin" />` — default Axis admin password left in place. Although `enableRemoteAdmin=false` limits exposure, the password is hardcoded and trivially known.
+- `server-config.wsdd` line 5: `<parameter name="adminPassword" value="[REDACTED — rotate immediately]" />` — default Axis admin password left in place. Although `enableRemoteAdmin=false` limits exposure, the password is hardcoded and trivially known.
 
 ## Technical Debt
 
@@ -162,7 +162,7 @@ To migrate this service to a Gen-3 platform (modern Spring Boot REST/JSON micros
 - Add API authentication (mutual TLS or OAuth2 client credentials) at gateway or service level
 - Enable HTTPS on all endpoints
 - Remove mobile number from application logs, or apply masking (e.g., log only last 4 digits)
-- Remove `adminPassword=admin` from any Axis remnants
+- Remove `adminPassword=[REDACTED — rotate immediately]` from any Axis remnants
 
 ### Message Template Externalisation
 - Remove hard-coded Citi Prepaid branding from `messages.properties`

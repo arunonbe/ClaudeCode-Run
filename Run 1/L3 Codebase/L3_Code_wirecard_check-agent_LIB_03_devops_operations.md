@@ -1,4 +1,4 @@
-# DevOps / Operations — wirecard_check-agent_LIB
+﻿# DevOps / Operations — wirecard_check-agent_LIB
 
 ## Build System
 - **Tool**: Gradle 4.x via Gradle Wrapper (`gradlew` / `gradlew.bat`)
@@ -28,7 +28,7 @@
 - `check-agent-config/src/main/resources/application.yml` — base configuration (H2/in-memory defaults for local dev)
 - Spring profiles: `wiremock` (uses WireMock for CCP/Brand server), `eventhubmock` (in-memory EventHub)
 - Production configuration is expected to be injected via environment-specific config files or a Spring Cloud Config Server (not defined in this repo)
-- **Hardcoded QA credentials** in `application.yml`: `ccp.client.password: aaaa1111`, `iss-auth-server.url` pointing to `wirecard.sys` domain — these are QA defaults that MUST be overridden in production
+- **Hardcoded QA credentials** in `application.yml`: `ccp.client.password: [REDACTED — rotate immediately]`, `iss-auth-server.url` pointing to `wirecard.sys` domain — these are QA defaults that MUST be overridden in production
 
 ## Observability
 - **Logging**: SLF4J + Logback (standard Spring Boot); logstash-logback-encoder (`net.logstash.logback:logstash-logback-encoder`) is a runtime dependency — structured JSON logging for ELK stack integration.
@@ -56,5 +56,5 @@
 2. **Nexus over HTTP**: `http://d-issrepo-app01.wirecard.sys:8081/nexus` — dependency resolution over HTTP is a supply-chain attack vector (PCI DSS Req 6.3.3).
 3. **CCP/Brand/Auth server calls over HTTP in QA config**: If QA config leaks to production, cardholder fund operations would traverse unencrypted HTTP.
 4. **`management.endpoint.health.show-details: ALWAYS`**: Exposes full health details including database connection status to anyone who can reach the `/monitoring/health` endpoint. This could reveal internal infrastructure details.
-5. **Hardcoded QA password `aaaa1111`** in `application.yml` — must be overridden via secure config injection in all non-dev environments.
+5. **Hardcoded QA password `[REDACTED — rotate immediately]`** in `application.yml` — must be overridden via secure config injection in all non-dev environments.
 6. **No deployment manifests in this repo**: Deployment topology, Ansible/Kubernetes configs, and environment-specific application configs are not in this repository, making it difficult to audit the production configuration.

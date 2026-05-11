@@ -1,4 +1,4 @@
-# Data Architect Report — wirecard_test-utilities_LIB
+﻿# Data Architect Report — wirecard_test-utilities_LIB
 
 ## Data Models
 
@@ -14,7 +14,7 @@ Production components (`CountryCode`, `CurrencyCode`) are annotation-based valid
 | Data Type | File | Severity |
 |-----------|------|---------- |
 | SFTP username `wirecard` | `EmbeddedSftpServer.java:36` | **HIGH** |
-| SFTP password `FxDMahi4TU` | `EmbeddedSftpServer.java:38` | **HIGH** |
+| SFTP password `[REDACTED — rotate immediately]` | `EmbeddedSftpServer.java:38` | **HIGH** |
 | PGP private key (full armored key material) | `src/main/resources/pgp/0x6392B27D-sec.asc` | **CRITICAL** |
 | PGP public key | `src/main/resources/pgp/0x6392B27D-pub.asc` | LOW (public key) |
 | PGP passphrase `wirecard` | `src/test/java/.../PGPUtilsTest.java:21` | **HIGH** |
@@ -50,5 +50,5 @@ None. No database access in this library.
 ## PCI DSS Compliance
 
 - **CRITICAL: PCI DSS Req. 3.5.1** — Cryptographic key material must be protected from unauthorized access. A private PGP key committed to a source code repository is accessible to all developers with repository access, violating key custodian requirements.
-- **HIGH: PCI DSS Req. 2.2** — Default and hardcoded credentials (`FxDMahi4TU`) in production source code (even if intended for test use only) must be inventoried and assessed.
+- **HIGH: PCI DSS Req. 2.2** — Default and hardcoded credentials (`[REDACTED — rotate immediately]`) in production source code (even if intended for test use only) must be inventoried and assessed.
 - **Note**: PCI DSS Req. 6.3.3 requires that all components are protected from known vulnerabilities. If the `utilities:2.0.0` dependency (from `wirecard_utilities_LIB`) contains vulnerable cryptographic implementations, this library inherits those vulnerabilities.

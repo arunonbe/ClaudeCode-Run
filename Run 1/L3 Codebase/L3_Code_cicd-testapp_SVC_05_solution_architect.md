@@ -1,4 +1,4 @@
-# cicd-testapp_SVC — Solution Architect View
+﻿# cicd-testapp_SVC — Solution Architect View
 
 ## Technical Architecture
 
@@ -126,7 +126,7 @@ Exposed via `RequestContextHttpInvokerServiceExporter` with XStream marshalling:
 4. **commons-dbcp 1.2.2 / commons-pool 1.4**: End-of-life connection pool; HikariCP is the modern replacement and offers better performance and monitoring.
 5. **`Log4jConfigListener` in `web.xml`**: This Spring 4 API was removed in Spring 5, making Spring 5 migration impossible without addressing logging bootstrap.
 6. **`REGISTRATION_REPLACE_EXISTING` JMX property** (`Configuration.xml` line 45): Spring 5 renamed this to `REPLACE_EXISTING`; commented in code but not yet resolved.
-7. **Inline commented credentials** (`DataSources.xml` lines 22–41): Commented-out beans contain `username=b2ctest`, `password=b2ctest`. Present in git history.
+7. **Inline commented credentials** (`DataSources.xml` lines 22–41): Commented-out beans contain `username=b2ctest`, `password=[REDACTED — rotate immediately]`. Present in git history.
 8. **`CachingConnectionFactory` without XA** (`FDRDebitServices.xml` line 733): Session cache size 10, but no XA transaction manager despite XA connection factory being declared in `context.xml`. Potential message loss under crash scenarios.
 9. **Abstract base class pattern for debit services**: `FDRDebitServices` extends `AbstractDebitServices` — the abstract base is not visible in the repo but is implied; tight coupling to FDR ODS protocol.
 10. **`MQJMSImp` recursive retry with `Thread.sleep`**: lines 140–146 and 193–198 use `Thread.sleep(2000)` in a recursive call chain up to depth 3. Under high load this wastes thread pool resources. Should use scheduled retry or circuit breaker.

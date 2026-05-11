@@ -1,4 +1,4 @@
-# Business Analyst View — exemplar-theater-service_WAPP
+﻿# Business Analyst View — exemplar-theater-service_WAPP
 
 ## Repository Overview
 
@@ -73,4 +73,4 @@ Theaters are associated with a `CustomSite` entity (custom site code + ID). This
 When applying this pattern to real Onbe payment services:
 - The `credentials` block in `application.yml` (lines 11–14) with plaintext username/password must be replaced with Azure Key Vault or Spring Cloud Config Server references.
 - The `show-sql: true` JPA setting (application.yml line 65) logs all SQL queries to the application log — this must be `false` in production to prevent potential exposure of PII or payment data in log streams.
-- The hardcoded database password in `application.yml` line 44 (`B00t1ful`) must be replaced with secrets management.
+- The hardcoded database password in `application.yml` line 44 (`[REDACTED — rotate immediately]`) must be replaced with secrets management.

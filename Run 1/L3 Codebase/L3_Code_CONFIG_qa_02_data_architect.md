@@ -1,4 +1,4 @@
-# Data Architect View — CONFIG_qa
+﻿# Data Architect View — CONFIG_qa
 
 ## Data Stores Configured
 
@@ -65,7 +65,7 @@ QA request → Tomcat (D:\c-base\config\) → SQL Server (q-db01:2431)
 
 ## Compliance Gaps
 - Multiple plaintext credentials in source control — same pattern as DEV
-- `cbaseapp.user=gentran` / `cbaseapp.password=gentran` — trivially guessable SQL Server credentials committed
+- `cbaseapp.user=gentran` / `cbaseapp.password=[REDACTED — rotate immediately]` — trivially guessable SQL Server credentials committed
 - IBM MQ credentials committed
 - SMS gateway credentials committed (SAP Mobile Services)
 - CBTS service credentials committed (same values as DEV — password reuse across environments)

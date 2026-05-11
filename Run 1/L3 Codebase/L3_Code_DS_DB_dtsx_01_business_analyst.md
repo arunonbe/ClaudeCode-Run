@@ -1,4 +1,4 @@
-# DS_DB_dtsx — Business Analyst View
+﻿# DS_DB_dtsx — Business Analyst View
 
 ## Repository Overview
 
@@ -71,7 +71,7 @@ The packages in this repository constitute Onbe's (then Wirecard North America) 
 ## Regulatory Relevance
 
 ### PCI DSS
-The AML Mantas ETL package (`AMLMantasETLNAM.dtsx`) extracts account-level data from EcountCore including fields mapped to cardholder identity. The `fdr_process_dd031_data` table ingested by `FDR_Import_DD031.dtsx` contains a `cvv` column sourced from FDR processor files — a **Critical PCI DSS finding**: CVV/CVC data must never be stored post-authorisation (PCI DSS v4.0.1 Requirement 3.3.1). The `.dtsConfig` files contain plaintext database passwords (password `r3p0rt1ng` visible in `Mantas_NAM_UAT.dtsConfig`), violating PCI DSS Requirement 8.
+The AML Mantas ETL package (`AMLMantasETLNAM.dtsx`) extracts account-level data from EcountCore including fields mapped to cardholder identity. The `fdr_process_dd031_data` table ingested by `FDR_Import_DD031.dtsx` contains a `cvv` column sourced from FDR processor files — a **Critical PCI DSS finding**: CVV/CVC data must never be stored post-authorisation (PCI DSS v4.0.1 Requirement 3.3.1). The `.dtsConfig` files contain plaintext database passwords (password `[REDACTED — rotate immediately]` visible in `Mantas_NAM_UAT.dtsConfig`), violating PCI DSS Requirement 8.
 
 ### NACHA / Reg E
 `Returned_Checks.dtsx` directly supports the ACH return processing workflow by extracting returned-check data from EcountCore. This is relevant to NACHA return code processing and Reg E dispute resolution timelines.

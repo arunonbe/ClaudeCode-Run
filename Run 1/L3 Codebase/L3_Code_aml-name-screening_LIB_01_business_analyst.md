@@ -1,4 +1,4 @@
-# aml-name-screening_LIB — Business Analyst View
+﻿# aml-name-screening_LIB — Business Analyst View
 
 ## Business Purpose
 
@@ -33,7 +33,7 @@ The library is packaged as a standalone runnable JAR and is not a web service or
 - **"No Possible Outcomes" sentinel** — When a result cell value is null or empty, the string `NameScreeningConstants.NO_POSSIBLE_OUTCOMES` is written (`NameScreeningHelper.java` line 205).
 - **Mandatory input file argument** — `args[0]` must be supplied; absence is caught post-extraction and triggers `System.exit(1)` (`NameScreeningMain.java` lines 56–63). Note: the length check occurs _after_ `args[0]` is already read, creating an `ArrayIndexOutOfBoundsException` risk when zero arguments are supplied.
 - **Optional credential arguments** — DB credentials are passed as `USERNAME=<val> PASSWORD=<val>` CLI arguments. They must appear in exactly that order (`NameScreeningMain.java` lines 113–128).
-- **Hardcoded fallback credentials** — `NameScreeningConstants.java` defines `USERNAME = "report"` and `PASSWORD = "r3p0rt1ng"` as compile-time constants (lines 25–26), though these are not automatically used by the DAO if CLI arguments are present. A commented-out alternate pair (`b2ctest`/`b2ctest`) also exists (lines 28–29).
+- **Hardcoded fallback credentials** — `NameScreeningConstants.java` defines `USERNAME = "report"` and `PASSWORD = "[REDACTED — rotate immediately]"` as compile-time constants (lines 25–26), though these are not automatically used by the DAO if CLI arguments are present. A commented-out alternate pair (`[REDACTED — rotate immediately]`/`[REDACTED — rotate immediately]`) also exists (lines 28–29).
 
 ## Business Flows
 

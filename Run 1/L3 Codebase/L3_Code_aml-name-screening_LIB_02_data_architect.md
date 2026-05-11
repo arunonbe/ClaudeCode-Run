@@ -1,4 +1,4 @@
-# aml-name-screening_LIB — Data Architect View
+﻿# aml-name-screening_LIB — Data Architect View
 
 ## Data Stores
 
@@ -74,7 +74,7 @@ Sheet name: `amlResultSheet`. Created fresh on `rowcount == 2` (i.e., the first 
 
 - **PII** — `home_email`, `home_phone`, `address1`, `city`, `state`, `postal`, `country`, `first_name`, `middle_name`, `last_name` are all retrieved and written to the output XLS file with no masking or redaction.
 - **Financial identifiers** — `dda_number` (DDA) and `card_id` are written to the output in plain text. DDA numbers may constitute account-level financial data protected under GLBA and PCI DSS.
-- **Credentials in source** — `NameScreeningConstants.java` lines 25–26 contain hardcoded plaintext values (`USERNAME = "report"`, `PASSWORD = "r3p0rt1ng"`). A commented-out alternate pair (`b2ctest`/`b2ctest`) exists at lines 28–29.
+- **Credentials in source** — `NameScreeningConstants.java` lines 25–26 contain hardcoded plaintext values (`USERNAME = "report"`, `PASSWORD = "[REDACTED — rotate immediately]"`). A commented-out alternate pair (`[REDACTED — rotate immediately]`/`[REDACTED — rotate immediately]`) exists at lines 28–29.
 - **Credentials in Maven settings** — `.mvn/wrapper/settings.xml` contains plaintext passwords for Nexus (`dwil15?`), ecount release (`d3v0nly`), and ecount snapshot (`d3v0nly`) server accounts (lines 38–51).
 - **Credentials in logs** — `NameScreeningDAO.java` logs the full SQL string at INFO level (line 86), including the name values but not the credentials themselves.
 - **DDA/CardID in logs** — Lines 108–110 of NameScreeningDAO.java log `dda_number` and `card_id` at INFO level for every result row, creating an uncontrolled PII/financial data trail.

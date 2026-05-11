@@ -1,4 +1,4 @@
-# DevOps / Operations — wirecard_corporate-client-module_LIB
+﻿# DevOps / Operations — wirecard_corporate-client-module_LIB
 
 ## Build System
 - **Tool**: Gradle 4.x via Gradle Wrapper (`gradlew` / `gradlew.bat`)
@@ -27,9 +27,9 @@
 - Spring profiles: `wiremock` (WireMock for CCP/Brand Server/CMM), `global` (TLS truststore block for local builds)
 - Production config injected via environment-specific overrides (not in this repo)
 - **Hardcoded QA credentials**:
-  - `ccp.client.password: aaaa1111`
-  - `cmm.client.password: aaaa1111`
-  - `iss-auth.client.password: aaaa1111`
+  - `ccp.client.password: [REDACTED — rotate immediately]`
+  - `cmm.client.password: [REDACTED — rotate immediately]`
+  - `iss-auth.client.password: [REDACTED — rotate immediately]`
   - Usernames: `callcenter_QA`, `callcenter_DEV`
 
 ## Deployment

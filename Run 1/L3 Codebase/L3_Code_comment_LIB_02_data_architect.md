@@ -1,4 +1,4 @@
-# comment_LIB — Data Architect View
+﻿# comment_LIB — Data Architect View
 
 ## Data Stores
 
@@ -75,7 +75,7 @@ None of these fields is masked, tokenised, or encrypted within the library. All 
 - No data masking is applied to any parameter before it is sent to the stored procedures.
 - The test JDBC URL (`commentTest.xml`) specifies `sslProtocol=TLSv1.2` and `trustServerCertificate=true`. `trustServerCertificate=true` disables server certificate validation, which presents a man-in-the-middle risk for the test configuration.
 - The production connection is obtained via JNDI (`java:comp/env/jdbc/CbaseappDataSource`). TLS configuration for the production connection is controlled by the Tomcat/application-server JNDI resource definition, which is outside this library.
-- Credentials for the test database (`username=csa`, `password=csa`) are committed in plaintext in `src/test/resources/commentTest.xml`.
+- Credentials for the test database (`username=csa`, `password=[REDACTED — rotate immediately]`) are committed in plaintext in `src/test/resources/commentTest.xml`.
 
 ## Data Flow
 

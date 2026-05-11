@@ -1,4 +1,4 @@
-# Data Architect View — strongbox-lib_LIB
+﻿# Data Architect View — strongbox-lib_LIB
 
 ## Data Stores
 | Store | Type | Description |
@@ -79,4 +79,4 @@ Caller stores reference token (not the data)
 | AES-128 CBC without authenticated encryption (no AEAD / GCM mode) — susceptible to padding oracle if not protected at transport layer | PCI DSS Req 3.6 | Medium |
 | No key rotation mechanism observed in code | PCI DSS Req 3.6.1 | High |
 | No delete/purge capability wired in production DAO | Data minimisation (GLBA/GDPR) | Medium |
-| Hardcoded test credentials in `spring.xml` (`b2cstage`/`b2cstage`, `b2ctest`/`b2ctest`) | PCI DSS Req 8 | High (test scope) |
+| Hardcoded test credentials in `spring.xml` (`b2cstage`/`b2cstage`, `[REDACTED — rotate immediately]`/`[REDACTED — rotate immediately]`) | PCI DSS Req 8 | High (test scope) |

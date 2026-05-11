@@ -1,4 +1,4 @@
-# accounting-workflow_WAPP — Solution Architect View
+﻿# accounting-workflow_WAPP — Solution Architect View
 
 ## Technical Architecture
 
@@ -92,7 +92,7 @@ All SPs follow the pattern: accept `@s_id` (session token) + `@action` (routing)
 | Finding | Severity | Location |
 |---|---|---|
 | **Plaintext password on wire** | Critical | `Login.cs:106` — `pwd.Value = PasswordTextBox.Text.Trim()` passed as `VarChar(256)` to SQL; SHA512 hash code commented out in lines 93–138 |
-| **Hardcoded shared database credentials** | Critical | `SQLData.cs:34,56` — `User Id=raf;Pwd=none` in connection string; cannot be rotated without recompile and redeployment |
+| **Hardcoded shared database credentials** | Critical | `SQLData.cs:34,56` — `User Id=raf;Pwd=[REDACTED — rotate immediately]` in connection string; cannot be rotated without recompile and redeployment |
 | **No TLS on SQL connection** | Critical | Connection string has no `Encrypt=true`; `SQL Native Client` ODBC driver used for ADODB path |
 | **Disabled assembly signing** | High | `AccountingWorkflow.csproj:19` — `<SignManifests>false</SignManifests>`; no code integrity verification |
 | **Local error log with sensitive data** | Medium | `ErrorLog.cs:62-65` — writes OS username, computer name, and full stack traces; no ACL enforcement |

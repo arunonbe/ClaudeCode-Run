@@ -1,4 +1,4 @@
-# accounting-workflow_WAPP — DevOps & Operations View
+﻿# accounting-workflow_WAPP — DevOps & Operations View
 
 ## Build & Packaging
 
@@ -44,7 +44,7 @@ The `AWSetup.vdproj` / `AWSSetup.vdproj` files suggest an alternative MSI-based 
 |---|---|---|
 | Database server IP | `AccountingWorkflow\app.config` (`<setting name="Server">192.168.10.200</setting>`) and `AccountingWorkflow\Properties\Settings.settings` | Hardcoded in both config and settings file; no environment-variable or secrets-manager indirection |
 | Application mode (FinSt vs TaskMon) | `userSettings` in `app.config`: `<setting name="Appr">2</setting>`; `AppSet.cs` reads/writes `Properties.Settings.Default.Appr` and calls `.Save()` | Per-user setting stored in the user profile (`allowExeDefinition="MachineToLocalUser"`); default value `2` (TaskMon mode) |
-| Database credentials | `SQLData.cs` lines 34 and 56 — `User Id=raf;Pwd=none` hardcoded in C# source; not in any config file | Cannot be changed without recompiling |
+| Database credentials | `SQLData.cs` lines 34 and 56 — `User Id=raf;Pwd=[REDACTED — rotate immediately]` hardcoded in C# source; not in any config file | Cannot be changed without recompiling |
 | Default document browse directory | `TaskDoc.cs:346`, `TaskDoc.cs:703`, `NewDoc.cs:48` — `"F:\\Daily_Recons1"` hardcoded in source | Not configurable without recompile |
 | SchCalendar control | `HintPath` references `..\..\Controls\SchCalendar.dll` — a relative path outside the repository | External dependency not under source control |
 | Excel/Office version | `Microsoft.Office.Interop.Excel Version=11.0.0.0` (Office 2003) | Hardcoded version; newer Office installations may require binding redirects or cause COM failures |

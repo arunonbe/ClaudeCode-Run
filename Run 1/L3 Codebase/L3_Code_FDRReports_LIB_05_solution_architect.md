@@ -1,4 +1,4 @@
-# Solution Architect View — FDRReports_LIB
+﻿# Solution Architect View — FDRReports_LIB
 
 ## Code Structure
 
@@ -21,14 +21,14 @@ There are **no helper methods, no classes, no interfaces, no separation of conce
 
 ### VULN-1: Hardcoded Production Database Password (CRITICAL — P0)
 **File**: `FDRReports.cs` line 413  
-**Detail**: `Password=Ecount99!` embedded in the production connection string literal. This credential is committed to the Git repository and accessible to anyone with repository read access.  
+**Detail**: `Password=[REDACTED — rotate immediately]` embedded in the production connection string literal. This credential is committed to the Git repository and accessible to anyone with repository read access.  
 **PCI DSS**: Violates Requirement 8.3.1 (protect individual non-consumer user authentication factors) and Requirement 8.2.1 (all user IDs and authentication factors must be kept confidential).  
 **Remediation**: Immediately rotate the `gplain` account password. Move to Windows Integrated Security (`Integrated Security=SSPI`) or Azure Key Vault secret reference.  
 **Priority**: P0 — Treat as a credential compromise incident.
 
 ### VULN-2: Hardcoded UAT Database Password (CRITICAL — P0)
 **File**: `FDRReports.cs` line 418  
-**Detail**: `Password=r3p0rt1ng` embedded in the UAT connection string literal.  
+**Detail**: `Password=[REDACTED — rotate immediately]` embedded in the UAT connection string literal.  
 **Remediation**: Same as VULN-1.  
 **Priority**: P0.
 

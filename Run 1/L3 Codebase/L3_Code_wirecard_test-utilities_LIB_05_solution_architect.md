@@ -1,4 +1,4 @@
-# Solution Architect Report — wirecard_test-utilities_LIB
+﻿# Solution Architect Report — wirecard_test-utilities_LIB
 
 ## API Surface
 
@@ -14,7 +14,7 @@ No HTTP endpoints. The library provides Java classes and resource files consumed
 |----------|---------|-----------|
 | **CRITICAL** | PGP private key committed to `src/main/resources` — packaged into production JAR | `src/main/resources/pgp/0x6392B27D-sec.asc` (entire file) |
 | **HIGH** | SFTP username hardcoded as static constant in production source | `EmbeddedSftpServer.java:36` (`SFTP_USER_NAME = "wirecard"`) |
-| **HIGH** | SFTP password hardcoded as static constant in production source | `EmbeddedSftpServer.java:38` (`SFTP_PASSWORD = "FxDMahi4TU"`) |
+| **HIGH** | SFTP password hardcoded as static constant in production source | `EmbeddedSftpServer.java:38` (`SFTP_PASSWORD = "[REDACTED — rotate immediately]"`) |
 | **HIGH** | Password comparison in `PasswordAuthenticator` uses string equality, not constant-time comparison | `EmbeddedSftpServer.java:62–65` |
 | **HIGH** | PGP passphrase `wirecard` hardcoded in test — if reused on production keys, key is compromised | `PGPUtilsTest.java:21` (`PASSPHRASE = "wirecard"`) |
 | **HIGH** | PGP private key passed as char array from hardcoded string (`"wirecard".toCharArray()`) | `PGPUtilsTest.java:47` |
@@ -39,16 +39,16 @@ If this key is or was used for any production PGP file exchange, all historical 
 `EmbeddedSftpServer.java` lines 36–38 define static final constants:
 ```java
 private static final String SFTP_USER_NAME = "wirecard";
-private static final String SFTP_PASSWORD = "FxDMahi4TU";
+private static final String SFTP_PASSWORD = "[REDACTED — rotate immediately]";
 ```
 
-These are compiled into the library's bytecode. The password `FxDMahi4TU` is burned into the JAR. If any production SFTP server was configured with this credential set, it must be rotated immediately.
+These are compiled into the library's bytecode. The password `[REDACTED — rotate immediately]` is burned into the JAR. If any production SFTP server was configured with this credential set, it must be rotated immediately.
 
 ### Issue 3: Password Comparison Timing Attack
 
 `EmbeddedSftpServer.java:62–65`:
 ```java
-return (username.equals("wirecard") && password.equals("FxDMahi4TU"));
+return (username.equals("wirecard") && password.equals("[REDACTED — rotate immediately]"));
 ```
 Standard string `equals()` is not constant-time. In a production context this would be a timing oracle for password comparison. For a test SFTP server, impact is low, but it reflects poor security practice that could be copied to production code.
 

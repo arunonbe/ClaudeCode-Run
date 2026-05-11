@@ -1,4 +1,4 @@
-# DevOps / Operations View — cross-border-transfer-service_SVC
+﻿# DevOps / Operations View — cross-border-transfer-service_SVC
 
 ## 1. Build System
 
@@ -69,7 +69,7 @@
 
 ## 5. Configuration Management
 
-- **Spring Cloud Config**: Both the REST controller and batch modules use Spring Cloud Config Server (`bootstrap.yml` lines 3–4: `uri: http://localhost:9990/config-server`). Config server credentials are hardcoded in bootstrap YAML (`password: s3cr3t`).
+- **Spring Cloud Config**: Both the REST controller and batch modules use Spring Cloud Config Server (`bootstrap.yml` lines 3–4: `uri: http://localhost:9990/config-server`). Config server credentials are hardcoded in bootstrap YAML (`password: [REDACTED — rotate immediately]`).
 - **Profile-based config**: `application-qa.yml` in `cross-border-transfer-service-config` provides QA-specific overrides; all secrets (DB password, Cambridge signatures, SMTP password) are in this file — which is source-controlled.
 - **External secrets**: No Vault, AWS Secrets Manager, or Azure Key Vault integration is present. All operational secrets live in YAML files.
 
@@ -142,5 +142,5 @@ java -jar cross-border-transfer-service-batch-*-exec.jar --spring.profiles.activ
 | Debug port 8000 in docker-compose | Medium | Remote debug port exposed — must be removed or guarded for production |
 | `show-sql: true` in QA config | Medium | Hibernate logs all SQL; risk if this profile is used in production or log shipping is enabled |
 | Dapr sidecar with no application code | Low | Dapr dependency adds image complexity and attack surface without demonstrated use |
-| Spring Cloud Config password hardcoded | Medium | `bootstrap.yml` has `password: s3cr3t` for config server — likely placeholder but present in source |
+| Spring Cloud Config password hardcoded | Medium | `bootstrap.yml` has `password: [REDACTED — rotate immediately]` for config server — likely placeholder but present in source |
 | Suppressed CVEs | Medium | Four Spring Framework CVEs suppressed in `.trivyignore` and `allowedlist.yaml` (CVE-2024-22262, CVE-2024-34750, CVE-2024-38816, CVE-2024-38821) — review required for PCI DSS vulnerability management obligation |

@@ -1,4 +1,4 @@
-# DevOps / Operations Analysis: rubens-playground-ms
+﻿# DevOps / Operations Analysis: rubens-playground-ms
 
 ## Build System
 - **Maven** single-module (mvnw wrapper present); POM schema version 4.1.0
@@ -62,7 +62,7 @@
 ## Operational Risks
 1. **Java 25 (EA/pre-release)**: `eclipse-temurin:25-*-alpine` — Java 25 is a pre-release JDK; using it in any environment that handles real data is a stability and support risk.
 2. **SNAPSHOT parent and artifact version**: Both `nexpay-parent:0.1.10-SNAPSHOT` and `orders-api-ms:0.0.1-SNAPSHOT` are snapshots — not production-ready versioning.
-3. **`DB_PASSWORD=postgres` default**: docker-compose default is the well-known postgres password — must never be used in any non-local environment.
+3. **`DB_PASSWORD=[REDACTED — rotate immediately]` default**: docker-compose default is the well-known postgres password — must never be used in any non-local environment.
 4. **`network_mode: host`** in docker-compose: Container shares host network — appropriate for local dev only; not suitable for production.
 5. **Debug logging of full Order object**: `Order.toString()` logs all PII fields including DOB, address, phone, email at DEBUG level; if DEBUG is enabled in any non-dev environment, PII appears in logs.
 6. **Playground classification**: Service named "playground" — operational governance must prevent production cardholder data from being processed here.

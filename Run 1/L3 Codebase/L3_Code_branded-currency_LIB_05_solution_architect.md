@@ -1,4 +1,4 @@
-# branded-currency_LIB — Solution Architect View
+﻿# branded-currency_LIB — Solution Architect View
 
 ## Technical Architecture
 
@@ -186,10 +186,10 @@ ConstraintVO getUserServiceConstraints(int userId, int serviceId, int unitOfMeas
 
 3. **Plaintext database password in VCS** (`brandedCurrencyTestContext.xml` lines 27–33):
    ```xml
-   <property name="username"><value>b2ctest</value></property>
-   <property name="password"><value>b2ctest</value></property>
+   <property name="username"><value>[REDACTED — rotate immediately]</value></property>
+   <property name="password"><value>[REDACTED — rotate immediately]</value></property>
    ```
-   Also a commented-out block with `andrewc/andrewc`. Both are committed to the repository.
+   Also a commented-out block with `[REDACTED — rotate immediately]/[REDACTED — rotate immediately]`. Both are committed to the repository.
 
 4. **SQL statement content in logs** (`UpdateTransactionStatus2SpringImpl`, lines 84–98): The `log.info()` call constructs and logs the full SQL statement including `transactionId`, `resultCode`, `resultMessage`, and `ecountTransferId`. Transfer IDs and status messages appear in application logs.
 

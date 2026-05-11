@@ -1,4 +1,4 @@
-# DS_DB_dtsx — Solution Architect View
+﻿# DS_DB_dtsx — Solution Architect View
 
 ## Technical Debt Summary
 
@@ -52,7 +52,7 @@ This repository contains significant accumulated technical debt spanning securit
 
 **File**: `QA/q-na-bat03/c-base/runtime/ndmroot/SSIS/Mantas_NAM_UAT.dtsConfig`
 **Location**: XML element `<ConfiguredValue>` for `DomesticReporting`, `DYNAMICS`, `GPCompanies`, `Reporting` connections
-**Credential exposed**: Username `report`, Password `r3p0rt1ng`
+**Credential exposed**: Username `report`, Password `[REDACTED — rotate immediately]`
 **Servers exposed**:
 - `ppamwdcPDsql4A1\ppamwdcPDsql4A1` → `Ecountcore_Process_SS`
 - `ppamwdcPIsql3A1\ppamwdcPIsql3A1` → `DYNAMICS`, `ecnt`
@@ -117,7 +117,7 @@ SSIS OLE DB Sources use stored procedure calls and direct SQL — no user-suppli
 
 | Priority | Finding | Action |
 |---|---|---|
-| P0 — Immediate | Plaintext password `r3p0rt1ng` in `.dtsConfig` committed to Git | Rotate credential; remove from Git history; deploy secrets manager |
+| P0 — Immediate | Plaintext password `[REDACTED — rotate immediately]` in `.dtsConfig` committed to Git | Rotate credential; remove from Git history; deploy secrets manager |
 | P0 — Immediate | CVV column in `fdr_process_dd031_data` (written by FDR_Import_DD031.dtsx) | Remove CVV column from table; null field in SSIS before write |
 | P1 — Within 30 days | `Primary Customer Account Password` field in AML Mantas feed | Audit field content; mask or remove if sensitive |
 | P1 — Within 30 days | SMTP without SSL in Returned_Checks.dtsx | Enable TLS |

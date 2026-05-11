@@ -1,4 +1,4 @@
-# DevOps / Operations Report — wirecard_test-utilities_LIB
+﻿# DevOps / Operations Report — wirecard_test-utilities_LIB
 
 ## Build System
 
@@ -38,7 +38,7 @@ Published as a Maven JAR dependency to GitHub Packages. Consumed by all Wirecard
 
 **No secrets management.** Credentials are hardcoded in source code:
 - `EmbeddedSftpServer.java:36`: `SFTP_USER_NAME = "wirecard"` — compile-time constant.
-- `EmbeddedSftpServer.java:38`: `SFTP_PASSWORD = "FxDMahi4TU"` — compile-time constant.
+- `EmbeddedSftpServer.java:38`: `SFTP_PASSWORD = "[REDACTED — rotate immediately]"` — compile-time constant.
 - `PGPUtilsTest.java:21`: `PASSPHRASE = "wirecard"` — test constant.
 
 PGP private key is a file in `src/main/resources/pgp/0x6392B27D-sec.asc`.

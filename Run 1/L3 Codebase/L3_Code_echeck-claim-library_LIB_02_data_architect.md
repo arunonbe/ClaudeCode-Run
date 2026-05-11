@@ -1,4 +1,4 @@
-# echeck-claim-library_LIB — Data Architect Report
+﻿# echeck-claim-library_LIB — Data Architect Report
 
 ## CRITICAL FINDING: Hardcoded Database Credentials in Source Control
 
@@ -8,8 +8,8 @@
 <bean id="CbaseappDataSource" class="org.apache.commons.dbcp.BasicDataSource">
     <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
     <property name="url" value="jdbc:jtds:sqlserver://ppamwdcdifsql1:2232/cbaseapp" />
-    <property name="username" value="b2ctest" />
-    <property name="password" value="b2ctest" />
+    <property name="username" value="[REDACTED — rotate immediately]" />
+    <property name="password" value="[REDACTED — rotate immediately]" />
 </bean>
 ```
 

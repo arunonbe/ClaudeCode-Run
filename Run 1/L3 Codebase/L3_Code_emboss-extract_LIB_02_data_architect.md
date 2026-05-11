@@ -1,4 +1,4 @@
-# 02 Data Architect — emboss-extract_LIB
+﻿# 02 Data Architect — emboss-extract_LIB
 
 ## CRITICAL — PCI DSS Scope Declaration
 
@@ -93,7 +93,7 @@ The datasource is configured via Spring XML (`appContext-emboss.xml` lines 12–
 ```
 ecountcore.url=jdbc:jtds:sqlserver://ecsqldev1:1433/ECountCore_test
 ecountcore.username=andrewc
-ecountcore.password=andrewc
+ecountcore.password=[REDACTED — rotate immediately]
 ```
 
 These are hardcoded developer credentials checked into source control. Even if they point to a dev/test database, committing credentials to source control violates PCI DSS Req 8.6.3 and is a security gap that must be remediated immediately.

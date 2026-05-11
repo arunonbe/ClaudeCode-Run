@@ -1,4 +1,4 @@
-# DS_DB_dtsx — DevOps and Operations View
+﻿# DS_DB_dtsx — DevOps and Operations View
 
 ## Build System
 
@@ -78,7 +78,7 @@ Package "backup" is the manual file-copy process described above. Key observatio
 | Risk | Severity | Detail |
 |---|---|---|
 | No CI/CD — fully manual deployment | High | Any deployment error directly impacts production. No rollback automation. |
-| Plaintext passwords in `.dtsConfig` files committed to Git | Critical | Password `r3p0rt1ng` for `report` SQL login is visible in `Mantas_NAM_UAT.dtsConfig`. Any person with repository access has production credentials. |
+| Plaintext passwords in `.dtsConfig` files committed to Git | Critical | Password `[REDACTED — rotate immediately]` for `report` SQL login is visible in `Mantas_NAM_UAT.dtsConfig`. Any person with repository access has production credentials. |
 | Package ProtectionLevel=2 on PROD | High | If packages are re-saved under a different Windows user account, all sensitive properties become blank, breaking production runs silently. |
 | No SSIS catalog / project deployment model | Medium | No centralised package management, version history, or parameter management. |
 | NDM file directories not source-controlled | Medium | File input paths hardcoded in packages; if NDM routing changes, packages silently read no data. |

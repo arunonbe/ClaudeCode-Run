@@ -173,7 +173,7 @@ The Onbe 363-repo estate hosts one of the most complex data architectures in the
 
 **HSM absence:** No Hardware Security Module integration is evidenced in any of the 363 repositories. The StrongBox vault stores all key material in SQL Server. PCI DSS Req 3.7 dual-control and split-knowledge requirements for key-encrypting keys are not met anywhere in the Gen-1/Gen-2 estate.
 
-**Key material in Git:** PGP private keys (cross-border-transfer-service_SVC, wirecard_test-utilities_LIB, wirecard_sg-bank-agent_LIB), JWE/DDA encryption keys (cs-api-v3 applicationContext-CSWS.properties, account-management-api accountmanagementapi.yaml), SFTP RSA private key (Titan PROD in infrastructure repo), and JKS keystore files (xsso_SVC, default password "ecount") are all committed to version control.
+**Key material in Git:** PGP private keys (cross-border-transfer-service_SVC, wirecard_test-utilities_LIB, wirecard_sg-bank-agent_LIB), JWE/DDA encryption keys (cs-api-v3 applicationContext-CSWS.properties, account-management-api accountmanagementapi.yaml), SFTP RSA private key (Titan PROD in infrastructure repo), and JKS keystore files (xsso_SVC, default password "[REDACTED — rotate immediately]") are all committed to version control.
 
 **Key rotation:** No key rotation mechanism is present in StrongBox. DPAPI machine-bound ETL encryption in DS_ETL_warehouse is tied to a single user account (NAM\nick.doan), creating a key-man risk for all warehouse ETL operations.
 

@@ -1,4 +1,4 @@
-# Solution Architect — wirecard_check-agent_LIB
+﻿# Solution Architect — wirecard_check-agent_LIB
 
 ## Technical Architecture
 
@@ -61,7 +61,7 @@ Full endpoint mapping is in `check-agent-rest-controller` (Java files not read i
 - REST calls to upstream services: HTTP in QA config (`http://q-horust-app02.wirecard.sys`). Production config must use HTTPS.
 
 ### Secrets
-- **`application.yml` QA secrets** (must not reach production): `ccp.client.password: aaaa1111`, `iss-auth.client.password: aaaa1111`.
+- **`application.yml` QA secrets** (must not reach production): `ccp.client.password: [REDACTED — rotate immediately]`, `iss-auth.client.password: [REDACTED — rotate immediately]`.
 - **Truststore password** in `global.datasource.truststore.password` — must be injected from a secrets vault.
 - **EventHub credentials**: ActiveMQ `userName: local`, `password: local` in dev config.
 
@@ -97,7 +97,7 @@ Full endpoint mapping is in `check-agent-rest-controller` (Java files not read i
 
 | File | Line | Risk |
 |---|---|---|
-| `check-agent-config/src/main/resources/application.yml` | 91–92 | `ccp.client.password: aaaa1111` — QA credential in committed config |
+| `check-agent-config/src/main/resources/application.yml` | 91–92 | `ccp.client.password: [REDACTED — rotate immediately]` — QA credential in committed config |
 | `check-agent-config/src/main/resources/application.yml` | 107–109 | `iss-auth-server.url` pointing to `wirecard.sys` — Wirecard internal hostname |
 | `check-agent-config/src/main/resources/application.yml` | 78 | ActiveMQ `tcp://localhost:61616` — plaintext, no TLS |
 | `check-agent-config/src/main/resources/application.yml` | 9 | `management.endpoint.health.show-details: ALWAYS` — overly permissive |

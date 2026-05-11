@@ -1,4 +1,4 @@
-# Automation_ClientZone — Data Architect View
+﻿# Automation_ClientZone — Data Architect View
 
 ## Data Stores
 
@@ -50,7 +50,7 @@ Key SQL queries constructed in `SearchableAddendaSteps.java`:
 ### Hardcoded Credentials (Critical Risk)
 1. **Database credentials** hardcoded in `framework/DatabaseConnection.java` line 25:
    - Username: `b2cstage`
-   - Password: `b2cstage`
+   - Password: `[REDACTED — rotate immediately]`
    - Server: `Q-LIS-DB02:2231` (internal QA SQL Server)
    - These are committed to source control in plain text.
 
@@ -64,12 +64,12 @@ Key SQL queries constructed in `SearchableAddendaSteps.java`:
    - PIN: `"1247"`, `"1234"`.
 
 3. **Application credentials** in `src/test/resources/data/clientzone.json`:
-   - `uname: "bhagyashree.bijagarni@onbe.com"`, `pwd: "Bhagy@nandache131"` — a named Onbe employee's actual email and what appears to be a real password.
+   - `uname: "bhagyashree.bijagarni@onbe.com"`, `pwd: "[REDACTED — rotate immediately]"` — a named Onbe employee's actual email and what appears to be a real password.
 
 4. **Application credentials** in `src/test/resources/data/wizard.json`:
    - Internal app URL `q-na-app05.nam.wirecard.sys:8090` and MPV URL `mypaymentvault.qa.onbe.dev` with credentials.
 
-5. **Hardcoded in SSLoginSteps.java** (lines 148, 170–171): Username `"Bhagyashree"` and password `"Passcode2"` hardcoded directly in step definitions.
+5. **Hardcoded in SSLoginSteps.java** (lines 148, 170–171): Username `"Bhagyashree"` and password `"[REDACTED — rotate immediately]"` hardcoded directly in step definitions.
 
 6. **Hardcoded address in RegistrationPage.java** (line 78): `input[value='1300 fayette street']`, city `Conshohocken`, zip `19428`, email `rashmi1dhandar@gmail.com`, phones `6106057162/6106057163` — PII hardcoded in page object locators.
 

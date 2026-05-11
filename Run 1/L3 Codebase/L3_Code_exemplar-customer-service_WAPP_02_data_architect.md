@@ -33,7 +33,7 @@ No payment card data (PAN, CVV, expiry) is present in this schema. This is a dem
 ## Encryption
 - TLS for DB connection: configurable via `spring.datasource.tlsEnabled` and JKS truststore (`DataSourceConfiguration.java` — lines 30-43). The truststore is expected to be injected as a Base64-encoded string at runtime.
 - No column-level encryption for PII fields (FIRST_NAME, LAST_NAME).
-- Passwords in `application.yml` are plaintext strings (B00t1ful, [REDACTED — rotate immediately]); these are hardcoded demo values but represent a pattern risk.
+- Passwords in `application.yml` are plaintext strings ([REDACTED — rotate immediately], [REDACTED — rotate immediately]); these are hardcoded demo values but represent a pattern risk.
 
 ## Data Flow
 1. REST API receives Customer JSON/XML.

@@ -1,4 +1,4 @@
-# accounting-workflow_WAPP — Business Analyst View
+﻿# accounting-workflow_WAPP — Business Analyst View
 
 ## Business Purpose
 
@@ -103,7 +103,7 @@ The application connects to a Microsoft SQL Server instance at a hard-coded IP (
 
 1. **Cardholder Liability in chart-of-accounts:** `liab.xml` contains a `Cardholder_Liability` node (id=13) and `Other_Customer_Liability` (id=21). These are balance-sheet categories with placeholder amounts, indicating the application reconciles accounts that include cardholder float — directly relevant to Onbe's prepaid card business.
 2. **Credential handling (plaintext):** `Login.cs` line 106 passes the raw password text directly as `@pwd` to SQL Server: `pwd.Value = PasswordTextBox.Text.Trim()`. This is transmitted over the SQL wire in cleartext.
-3. **Hardcoded database credential:** `SQLData.cs` lines 34 and 56 embed `User Id=raf;Pwd=none` in the connection string in source code. This is a PCI DSS v4.0 Requirement 8 violation (shared/hardcoded credentials).
+3. **Hardcoded database credential:** `SQLData.cs` lines 34 and 56 embed `User Id=raf;Pwd=[REDACTED — rotate immediately]` in the connection string in source code. This is a PCI DSS v4.0 Requirement 8 violation (shared/hardcoded credentials).
 4. **No MFA / RBAC in the client:** User identity is enforced entirely by the server-side stored procedures; no client-side role enforcement exists.
 5. **File path exposure:** `TaskDoc.cs` and `NewDoc.cs` default to `F:\Daily_Recons1` as the initial file dialog directory — this UNC or local path may contain reconciliation evidence files.
 6. **Error log on local disk:** `ErrorLog.WriteToErrorLog` writes stack traces containing internal logic to `<StartupPath>\Errors\errlog.txt` without access controls.

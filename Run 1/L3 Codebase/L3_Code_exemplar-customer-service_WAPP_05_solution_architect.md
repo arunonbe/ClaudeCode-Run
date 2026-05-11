@@ -48,10 +48,10 @@ Content types: `application/vnd.onbe.v1+json`, `application/vnd.onbe.v1+xml` (de
 ### Secrets
 - **CRITICAL — Hardcoded secrets in source**:
   - `application.yml` line 8: `password: "[REDACTED — rotate immediately]"` — plaintext credential.
-  - `application.yml` line 40: `password: B00t1ful` — database password.
+  - `application.yml` line 40: `password: [REDACTED — rotate immediately]` — database password.
   - `application.yml` line 43-44: `username: SA` — SQL Server SA account.
   - `pom.xml` line 271: `<pactBrokerToken>emSbllw1wbfH-ZAFB-cD-Q</pactBrokerToken>` — PactFlow API token.
-  - `application.yml` line 37 (commented): `password=B00t1ful` in commented Azure SQL connection string.
+  - `application.yml` line 37 (commented): `password=[REDACTED — rotate immediately]` in commented Azure SQL connection string.
 
 ### CVEs / Dependency Risks
 - **Spring Boot 2.4.5** (EOL March 2023): Multiple known CVEs in Spring Framework and related components since this version.
@@ -87,7 +87,7 @@ This IS the Gen-3 exemplar. Remaining gaps before it can be used as a production
 | File | Line | Risk |
 |------|------|------|
 | `customer-service-config/src/main/resources/application.yml` | 8 | Hardcoded credentials password |
-| `customer-service-config/src/main/resources/application.yml` | 40 | Hardcoded DB password `B00t1ful` |
+| `customer-service-config/src/main/resources/application.yml` | 40 | Hardcoded DB password `[REDACTED — rotate immediately]` |
 | `customer-service-config/src/main/resources/application.yml` | 43 | SA username for SQL Server |
 | `customer-service-config/src/main/resources/application.yml` | 13-15 | H2 console enabled |
 | `pom.xml` | 271 | PactFlow API token hardcoded |

@@ -1,4 +1,4 @@
-# Solution Architect Report — optic_WAPP
+﻿# Solution Architect Report — optic_WAPP
 
 ## API Surface
 
@@ -25,7 +25,7 @@ The `.xlsm` files store VBA code in binary Office Open XML format. Git cannot pr
 
 Legacy Excel VBA applications commonly embed database connection strings directly in code, for example:
 ```vba
-conn.Open "Driver={SQL Server};Server=riskdb;Database=RiskDB;Uid=optic_user;Pwd=S3cr3tP@ss;"
+conn.Open "Driver={SQL Server};Server=riskdb;Database=RiskDB;Uid=optic_user;Pwd=[REDACTED — rotate immediately];"
 ```
 If OPTIC contains hardcoded credentials:
 - All users who can open the file in Excel (Developer → Visual Basic) can read the credentials.
