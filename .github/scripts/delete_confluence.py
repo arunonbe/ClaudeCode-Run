@@ -142,8 +142,7 @@ def find_all_by_creator(space_id: str) -> list:
     while True:
         r = requests.get(
             f"{WIKI_BASE}/rest/api/search",
-            params={"cql": cql, "limit": 200, "start": start,
-                    "expand": "content.id,content.title"},
+            params={"cql": cql, "limit": 200, "start": start},
             auth=AUTH, headers=HEADERS
         )
         r.raise_for_status()
