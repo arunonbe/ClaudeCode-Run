@@ -1,5 +1,6 @@
 # core-clients_LIB — Business Analyst View
 
+
 ## Business Purpose
 
 `core-clients_LIB` is a shared Java client library that enables consuming applications to communicate with Onbe's Gen-1/Gen-2 back-end services over XML-RPC. It does **not** contain business logic itself; instead it provides type-safe, agent-aware proxy objects that marshal Java POJOs into XML-RPC payloads and unmarshal responses back. Every downstream service that needs to interact with ECountCore, the Profile service, the Security service, the Order service, the Event service, or the StrongBox secret store depends on one or more JARs from this library.
