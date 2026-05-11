@@ -106,6 +106,7 @@ def find_page(title: str, space_id: str, parent_id: str = None) -> dict | None:
 def create_page(title: str, space_id: str, parent_id: str, body: str) -> dict:
     payload = {
         "title":    title,
+        "status":   "current",
         "spaceId":  space_id,
         "parentId": str(parent_id),
         "body":     {"representation": "storage", "value": body},
@@ -116,7 +117,8 @@ def create_page(title: str, space_id: str, parent_id: str, body: str) -> dict:
     return r.json()
 
 
-def update_page(page_id: str, title: str, current_version: int, body: str) -> dict:
+def update_page(page_id: str, title: str, current_version: int, body: str,
+                parent_id: str = None) -> dict:
     payload = {
         "id":      str(page_id),
         "title":   title,
@@ -124,6 +126,8 @@ def update_page(page_id: str, title: str, current_version: int, body: str) -> di
         "version": {"number": current_version + 1, "message": "Synced via GitHub Actions"},
         "body":    {"representation": "storage", "value": body},
     }
+    if parent_id is not None:
+        payload["parentId"] = str(parent_id)
     r = requests.put(f"{BASE_URL}/pages/{page_id}", json=payload, auth=AUTH, headers=HEADERS)
     if not r.ok:
         raise SystemExit(f"ERROR updating '{title}': {r.status_code}\n{r.text[:600]}")
@@ -136,15 +140,82 @@ def ensure_page(title: str, space_id: str, parent_id: str, body: str) -> dict:
         ver = existing.get("version", {}).get("number", 1)
         page = update_page(existing["id"], title, ver, body)
         print(f"  [updated] {title}")
-    else:
-        page = create_page(title, space_id, parent_id, body)
+        return page
+
+    # Page not found under the expected parent — try to create it.
+    r = requests.post(
+        f"{BASE_URL}/pages",
+        json={
+            "title":    title,
+            "status":   "current",
+            "spaceId":  space_id,
+            "parentId": str(parent_id),
+            "body":     {"representation": "storage", "value": body},
+        },
+        auth=AUTH, headers=HEADERS,
+    )
+
+    if r.ok:
         print(f"  [created] {title}")
-    return page
+        return r.json()
+
+    err_text = r.text
+    # Handle: page exists but under a different parent (orphaned from a prior run)
+    if r.status_code == 400 and "already exists" in err_text:
+        orphan = find_page(title, space_id)  # search without parent filter
+        if orphan:
+            ver = orphan.get("version", {}).get("number", 1)
+            page = update_page(orphan["id"], title, ver, body, parent_id)
+            print(f"  [moved+updated] {title}")
+            return page
+
+    # Handle: content rejected — retry with sanitized HTML
+    if r.status_code == 400 and "unsupported" in err_text.lower():
+        clean_body = sanitize_storage(body)
+        r2 = requests.post(
+            f"{BASE_URL}/pages",
+            json={
+                "title":    title,
+                "status":   "current",
+                "spaceId":  space_id,
+                "parentId": str(parent_id),
+                "body":     {"representation": "storage", "value": clean_body},
+            },
+            auth=AUTH, headers=HEADERS,
+        )
+        if r2.ok:
+            print(f"  [created-sanitized] {title}")
+            return r2.json()
+        raise SystemExit(f"ERROR creating '{title}' (sanitized): {r2.status_code}\n{r2.text[:600]}")
+
+    raise SystemExit(f"ERROR creating '{title}': {r.status_code}\n{err_text[:600]}")
 
 
 # ---------------------------------------------------------------------------
 # Markdown → Confluence storage format
 # ---------------------------------------------------------------------------
+
+# Regex to strip class/lang attributes that some Confluence editors reject
+_CODE_CLASS_RE = re.compile(r'<code\s+class="[^"]*">', re.IGNORECASE)
+
+def sanitize_storage(html_body: str) -> str:
+    """Remove attributes from <code> tags and replace non-ASCII box-drawing
+    / arrow characters that Confluence Fabric editor may reject."""
+    # Strip class attribute from <code class="..."> tags
+    cleaned = _CODE_CLASS_RE.sub("<code>", html_body)
+    # Replace Unicode box-drawing characters with ASCII equivalents
+    box_map = str.maketrans({
+        "─": "-", "│": "|", "┌": "+", "┐": "+",
+        "└": "+", "┘": "+", "├": "+", "┤": "+",
+        "┬": "+", "┴": "+", "┼": "+",
+        "═": "=", "║": "|", "╔": "+", "╗": "+",
+        "╚": "+", "╝": "+", "╠": "+", "╣": "+",
+        "╦": "+", "╩": "+", "╬": "+",
+        "→": "->", "←": "<-", "⇒": "=>",
+        "–": "-", "•": "*",
+    })
+    return cleaned.translate(box_map)
+
 
 def md_to_storage(text: str) -> str:
     return mdlib.markdown(
