@@ -120,6 +120,7 @@ def update_page(page_id: str, title: str, current_version: int, body: str) -> di
     payload = {
         "id":      str(page_id),
         "title":   title,
+        "status":  "current",
         "version": {"number": current_version + 1, "message": "Synced via GitHub Actions"},
         "body":    {"representation": "storage", "value": body},
     }

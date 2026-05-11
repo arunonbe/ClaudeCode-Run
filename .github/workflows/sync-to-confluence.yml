@@ -2,7 +2,7 @@ name: Sync All Layers to Confluence
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
     paths:
       - 'Run 1/L1 Organism/**.md'
       - 'Run 1/L2 Molecule/**.md'
