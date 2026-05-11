@@ -197,10 +197,18 @@ def ensure_page(title: str, space_id: str, parent_id: str, body: str) -> dict:
 
 # Regex to strip class/lang attributes that some Confluence editors reject
 _CODE_CLASS_RE = re.compile(r'<code\s+class="[^"]*">', re.IGNORECASE)
+# Regex to match inline and fenced <code> blocks
+_CODE_BLOCK_RE = re.compile(r'(<code[^>]*>)(.*?)(</code>)', re.DOTALL)
+
+
+def _escape_braces(m: re.Match) -> str:
+    """Escape curly braces inside <code> blocks to prevent Confluence macro detection."""
+    return m.group(1) + m.group(2).replace("{", "&#123;").replace("}", "&#125;") + m.group(3)
+
 
 def sanitize_storage(html_body: str) -> str:
-    """Remove attributes from <code> tags and replace non-ASCII box-drawing
-    / arrow characters that Confluence Fabric editor may reject."""
+    """Remove attributes from <code> tags, replace box-drawing / arrow characters,
+    and escape curly braces so Confluence does not treat {macro} syntax as macros."""
     # Strip class attribute from <code class="..."> tags
     cleaned = _CODE_CLASS_RE.sub("<code>", html_body)
     # Replace Unicode box-drawing characters with ASCII equivalents
@@ -214,14 +222,15 @@ def sanitize_storage(html_body: str) -> str:
         "→": "->", "←": "<-", "⇒": "=>",
         "–": "-", "•": "*",
     })
-    return cleaned.translate(box_map)
+    cleaned = cleaned.translate(box_map)
+    # Escape { } inside <code> blocks to prevent old-style Confluence macro detection
+    cleaned = _CODE_BLOCK_RE.sub(_escape_braces, cleaned)
+    return cleaned
 
 
 def md_to_storage(text: str) -> str:
-    return mdlib.markdown(
-        text,
-        extensions=["tables", "fenced_code", "sane_lists"],
-    )
+    raw = mdlib.markdown(text, extensions=["tables", "fenced_code", "sane_lists"])
+    return sanitize_storage(raw)
 
 
 def read_md(path: Path) -> str:
