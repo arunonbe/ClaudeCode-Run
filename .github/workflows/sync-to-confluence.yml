@@ -1,20 +1,22 @@
-name: Sync L3 Codebase to Confluence
+name: Sync All Layers to Confluence
 
 on:
   push:
     branches: [main]
     paths:
+      - 'Run 1/L1 Organism/**.md'
+      - 'Run 1/L2 Molecule/**.md'
       - 'Run 1/L3 Codebase/**.md'
   workflow_dispatch:
     inputs:
       sync_all:
-        description: 'Sync all 363 repos (leave blank to sync only changed files)'
+        description: 'Sync all layers (L1 + L2 + L3). Leave as true for full sync.'
         required: false
         default: 'true'
 
 jobs:
   confluence-sync:
-    name: Sync changed repos to Confluence
+    name: Sync changed layers to Confluence
     runs-on: ubuntu-latest
 
     steps:
@@ -31,19 +33,19 @@ jobs:
       - name: Install dependencies
         run: pip install requests markdown
 
-      - name: Detect changed L3 Codebase files
+      - name: Detect changed files across all layers
         id: changes
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "files=" >> $GITHUB_OUTPUT
-            echo "Manual trigger — syncing all repos"
+            echo "Manual trigger — full sync of L1, L2, and L3"
           elif git rev-parse HEAD~1 > /dev/null 2>&1; then
-            FILES=$(git diff --name-only HEAD~1 HEAD -- 'Run 1/L3 Codebase/' | tr '\n' ' ')
+            FILES=$(git diff --name-only HEAD~1 HEAD -- 'Run 1/' | tr '\n' ' ')
             echo "files=$FILES" >> $GITHUB_OUTPUT
             echo "Changed files: $FILES"
           else
             echo "files=" >> $GITHUB_OUTPUT
-            echo "First commit — syncing all repos"
+            echo "First commit — syncing all layers"
           fi
 
       - name: Sync to Confluence

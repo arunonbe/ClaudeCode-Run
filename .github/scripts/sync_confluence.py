@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 """
-sync_confluence.py — Sync L3 Codebase analysis pages to Confluence.
+sync_confluence.py — Sync all 3 analysis layers to Confluence.
 
 Confluence structure created/maintained:
-  Haiintel Team (folder, pre-existing, ID from CONFLUENCE_FOLDER_ID)
-  └── Run 1                          (page)
-      └── L3 Codebase                (page)
-          └── <repo-name>            (page, one per repo)
-              ├── H2: Business Analyst
-              ├── H2: Data Architect
-              ├── H2: DevOps and Operations
-              ├── H2: Enterprise Architect
-              └── H2: Solution Architect
+  Haiintel Team (folder, pre-existing)
+  └── Run 1
+      ├── L1 Organism
+      │   └── FINAL_COMBINED_REPORT       (1 page)
+      ├── L2 Molecule
+      │   ├── MASTER_BUSINESS_ANALYST
+      │   ├── MASTER_DATA_ARCHITECT
+      │   ├── MASTER_DEVOPS
+      │   ├── MASTER_ENTERPRISE_ARCHITECT
+      │   └── MASTER_SOLUTION_ARCHITECT   (5 pages)
+      └── L3 Codebase
+          └── <repo-name>                 (363 pages, 5 sections each)
 
-Usage (called by GitHub Actions):
+Usage:
   python sync_confluence.py [changed_file_1 changed_file_2 ...]
-  Passing no files triggers a full sync of all repos found in Run 1/L3 Codebase/.
+  No args = full sync of all layers.
+  With args = only layers that have changed files are synced.
 """
 
 import html
@@ -28,27 +32,46 @@ import markdown as mdlib
 import requests
 
 # ---------------------------------------------------------------------------
-# Config — all values come from environment (GitHub Secrets)
+# Config from environment (GitHub Secrets)
 # ---------------------------------------------------------------------------
-DOMAIN    = os.environ["ATLASSIAN_DOMAIN"]       # onbeco.atlassian.net
-EMAIL     = os.environ["ATLASSIAN_EMAIL"]         # arun.kumar@onbe.com
+DOMAIN    = os.environ["ATLASSIAN_DOMAIN"]
+EMAIL     = os.environ["ATLASSIAN_EMAIL"]
 TOKEN     = os.environ["ATLASSIAN_API_TOKEN"]
-FOLDER_ID = os.environ["CONFLUENCE_FOLDER_ID"]   # 3500736563
+FOLDER_ID = os.environ["CONFLUENCE_FOLDER_ID"]
 SPACE_KEY = "OT"
 
-BASE_URL  = f"https://{DOMAIN}/wiki/api/v2"
-AUTH      = (EMAIL, TOKEN)
-HEADERS   = {"Accept": "application/json", "Content-Type": "application/json"}
+BASE_URL = f"https://{DOMAIN}/wiki/api/v2"
+AUTH     = (EMAIL, TOKEN)
+HEADERS  = {"Accept": "application/json", "Content-Type": "application/json"}
 
-FILES_ROOT = Path("Run 1/L3 Codebase")
+# Layer roots
+L1_ROOT = Path("Run 1/L1 Organism")
+L2_ROOT = Path("Run 1/L2 Molecule")
+L3_ROOT = Path("Run 1/L3 Codebase")
 
-SECTIONS = [
+# L2 master files (title → filename stem)
+L2_PAGES = [
+    ("MASTER_BUSINESS_ANALYST",     "Master Business Analyst"),
+    ("MASTER_DATA_ARCHITECT",       "Master Data Architect"),
+    ("MASTER_DEVOPS",               "Master DevOps"),
+    ("MASTER_ENTERPRISE_ARCHITECT", "Master Enterprise Architect"),
+    ("MASTER_SOLUTION_ARCHITECT",   "Master Solution Architect"),
+]
+
+# L3 analyst section keys
+L3_SECTIONS = [
     ("01_business_analyst",     "Business Analyst"),
     ("02_data_architect",       "Data Architect"),
     ("03_devops_operations",    "DevOps and Operations"),
     ("04_enterprise_architect", "Enterprise Architect"),
     ("05_solution_architect",   "Solution Architect"),
 ]
+
+L3_FILE_RE = re.compile(
+    r"L3_Code_(.+?)_"
+    r"(?:01_business_analyst|02_data_architect|03_devops_operations"
+    r"|04_enterprise_architect|05_solution_architect)\.md$"
+)
 
 # ---------------------------------------------------------------------------
 # Confluence REST API v2 helpers
@@ -68,8 +91,6 @@ def get_space_id() -> str:
 
 
 def find_page(title: str, space_id: str, parent_id: str = None) -> dict | None:
-    """Search for a page by exact title within the space.
-    Optionally filter by parent_id to avoid title collisions."""
     r = requests.get(
         f"{BASE_URL}/pages",
         params={"title": title, "space-id": space_id, "status": "current", "limit": 25},
@@ -91,9 +112,7 @@ def create_page(title: str, space_id: str, parent_id: str, body: str) -> dict:
     }
     r = requests.post(f"{BASE_URL}/pages", json=payload, auth=AUTH, headers=HEADERS)
     if not r.ok:
-        raise SystemExit(
-            f"ERROR creating page '{title}': {r.status_code}\n{r.text[:600]}"
-        )
+        raise SystemExit(f"ERROR creating '{title}': {r.status_code}\n{r.text[:600]}")
     return r.json()
 
 
@@ -101,24 +120,16 @@ def update_page(page_id: str, title: str, current_version: int, body: str) -> di
     payload = {
         "id":      str(page_id),
         "title":   title,
-        "version": {
-            "number":  current_version + 1,
-            "message": "Synced via GitHub Actions",
-        },
-        "body": {"representation": "storage", "value": body},
+        "version": {"number": current_version + 1, "message": "Synced via GitHub Actions"},
+        "body":    {"representation": "storage", "value": body},
     }
-    r = requests.put(
-        f"{BASE_URL}/pages/{page_id}", json=payload, auth=AUTH, headers=HEADERS
-    )
+    r = requests.put(f"{BASE_URL}/pages/{page_id}", json=payload, auth=AUTH, headers=HEADERS)
     if not r.ok:
-        raise SystemExit(
-            f"ERROR updating page '{title}' (id={page_id}): {r.status_code}\n{r.text[:600]}"
-        )
+        raise SystemExit(f"ERROR updating '{title}': {r.status_code}\n{r.text[:600]}")
     return r.json()
 
 
 def ensure_page(title: str, space_id: str, parent_id: str, body: str) -> dict:
-    """Find-and-update or create a page. Returns the resulting page dict."""
     existing = find_page(title, space_id, parent_id)
     if existing:
         ver = existing.get("version", {}).get("number", 1)
@@ -135,56 +146,101 @@ def ensure_page(title: str, space_id: str, parent_id: str, body: str) -> dict:
 # ---------------------------------------------------------------------------
 
 def md_to_storage(text: str) -> str:
-    """Convert Markdown text to Confluence-compatible HTML storage format."""
     return mdlib.markdown(
         text,
         extensions=["tables", "fenced_code", "sane_lists"],
     )
 
 
-def build_repo_body(repo: str) -> str:
-    """Build the full HTML body for a repo page (5 analyst sections)."""
-    parts = []
-    for key, label in SECTIONS:
-        md_path = FILES_ROOT / f"L3_Code_{repo}_{key}.md"
-        label_escaped = html.escape(label)
-        if md_path.exists():
-            md_text = md_path.read_text(encoding="utf-8", errors="replace")
-            content = md_to_storage(md_text)
+def read_md(path: Path) -> str:
+    return path.read_text(encoding="utf-8", errors="replace") if path.exists() else ""
+
+
+# ---------------------------------------------------------------------------
+# Layer sync functions
+# ---------------------------------------------------------------------------
+
+def sync_l1(space_id: str, run1_id: str):
+    print("\n── L1 Organism ──────────────────────────────────────")
+    l1 = ensure_page(
+        "L1 Organism", space_id, run1_id,
+        "<p>Single authoritative synthesis of the full Onbe 363-repository "
+        "technology estate assessment (May 2026).</p>"
+    )
+    path = L1_ROOT / "FINAL_COMBINED_REPORT.md"
+    if path.exists():
+        ensure_page(
+            "FINAL_COMBINED_REPORT", space_id, l1["id"],
+            md_to_storage(read_md(path))
+        )
+    else:
+        print(f"  [skip] FINAL_COMBINED_REPORT.md not found at {path}")
+
+
+def sync_l2(space_id: str, run1_id: str):
+    print("\n── L2 Molecule ──────────────────────────────────────")
+    l2 = ensure_page(
+        "L2 Molecule", space_id, run1_id,
+        "<p>Master synthesis documents across 5 specialist viewpoints "
+        "covering all 363 repositories (May 2026).</p>"
+    )
+    for stem, title in L2_PAGES:
+        path = L2_ROOT / f"{stem}.md"
+        if path.exists():
+            ensure_page(title, space_id, l2["id"], md_to_storage(read_md(path)))
         else:
-            content = "<p><em>File not found.</em></p>"
-        parts.append(f"<h2>{label_escaped}</h2>\n{content}")
-    return "\n".join(parts)
+            print(f"  [skip] {stem}.md not found")
+
+
+def sync_l3(space_id: str, run1_id: str, repos: set):
+    print(f"\n── L3 Codebase ({len(repos)} repos) ──────────────────────────")
+    l3 = ensure_page(
+        "L3 Codebase", space_id, run1_id,
+        "<p>Per-repository L3 codebase analysis — 363 repositories, "
+        "5 specialist viewpoints each (May 2026).</p>"
+    )
+    ok, failed = 0, 0
+    for repo in sorted(repos):
+        try:
+            parts = []
+            for key, label in L3_SECTIONS:
+                path = L3_ROOT / f"L3_Code_{repo}_{key}.md"
+                label_safe = html.escape(label)
+                content = md_to_storage(read_md(path)) if path.exists() \
+                    else "<p><em>File not found.</em></p>"
+                parts.append(f"<h2>{label_safe}</h2>\n{content}")
+            ensure_page(repo, space_id, l3["id"], "\n".join(parts))
+            ok += 1
+        except SystemExit as e:
+            print(f"  [FAILED] {repo} — {e}")
+            failed += 1
+    print(f"  L3 result: {ok} synced, {failed} failed")
+    return failed
 
 
 # ---------------------------------------------------------------------------
-# Repo name extraction from file paths
+# Change detection
 # ---------------------------------------------------------------------------
 
-FILE_RE = re.compile(
-    r"L3_Code_(.+?)_"
-    r"(?:01_business_analyst|02_data_architect|03_devops_operations"
-    r"|04_enterprise_architect|05_solution_architect)\.md$"
-)
+def detect_layers(changed_files: list) -> tuple:
+    """Return (sync_l1, sync_l2, repos_l3) based on changed file list.
+    Empty file list means full sync."""
+    if not changed_files:
+        repos = {
+            m.group(1)
+            for p in L3_ROOT.glob("L3_Code_*_01_business_analyst.md")
+            if (m := L3_FILE_RE.search(p.name))
+        }
+        return True, True, repos
 
-
-def repos_from_files(file_list: list) -> set:
-    repos = set()
-    for f in file_list:
-        m = FILE_RE.search(Path(f).name)
-        if m:
-            repos.add(m.group(1))
-    return repos
-
-
-def all_repos_on_disk() -> set:
-    """Fall-back: derive repo list from files present in the working tree."""
-    repos = set()
-    for p in FILES_ROOT.glob("L3_Code_*_01_business_analyst.md"):
-        m = FILE_RE.search(p.name)
-        if m:
-            repos.add(m.group(1))
-    return repos
+    do_l1 = any("L1 Organism" in f for f in changed_files)
+    do_l2 = any("L2 Molecule" in f for f in changed_files)
+    repos  = {
+        m.group(1)
+        for f in changed_files
+        if (m := L3_FILE_RE.search(Path(f).name))
+    }
+    return do_l1, do_l2, repos
 
 
 # ---------------------------------------------------------------------------
@@ -192,67 +248,45 @@ def all_repos_on_disk() -> set:
 # ---------------------------------------------------------------------------
 
 def main():
-    changed_args = sys.argv[1:]
-    repos = repos_from_files(changed_args) if changed_args else all_repos_on_disk()
+    changed = sys.argv[1:]
+    do_l1, do_l2, repos_l3 = detect_layers(changed)
 
-    if not repos:
-        print("No L3 Codebase repos to sync. Exiting.")
+    if not do_l1 and not do_l2 and not repos_l3:
+        print("No relevant changes detected. Nothing to sync.")
         return
 
     print("=" * 60)
-    print(f"Repos to sync : {len(repos)}")
-    print(f"Confluence    : https://{DOMAIN}/wiki/spaces/{SPACE_KEY}")
+    print(f"L1 Organism : {'YES' if do_l1 else 'skip'}")
+    print(f"L2 Molecule : {'YES' if do_l2 else 'skip'}")
+    print(f"L3 Codebase : {len(repos_l3)} repo(s)")
     print("=" * 60)
 
     space_id = get_space_id()
-    print(f"Space ID      : {space_id}\n")
+    print(f"Space ID    : {space_id}")
 
-    # Ensure "Run 1" page under the Haiintel Team folder
+    # Ensure root "Run 1" page under Haiintel Team folder
     run1 = ensure_page(
-        title="Run 1",
-        space_id=space_id,
-        parent_id=FOLDER_ID,
-        body=(
-            "<p>Analysis output from the Onbe 363-repository technology "
-            "estate assessment conducted in May 2026.</p>"
-        ),
+        "Run 1", space_id, FOLDER_ID,
+        "<p>Analysis output from the Onbe 363-repository technology "
+        "estate assessment conducted in May 2026.</p>"
     )
 
-    # Ensure "L3 Codebase" page under "Run 1"
-    l3 = ensure_page(
-        title="L3 Codebase",
-        space_id=space_id,
-        parent_id=run1["id"],
-        body=(
-            "<p>Per-repository L3 codebase analysis covering all 363 repositories "
-            "across 5 specialist viewpoints: Business Analyst, Data Architect, "
-            "DevOps and Operations, Enterprise Architect, and Solution Architect.</p>"
-        ),
-    )
+    total_failures = 0
 
-    print()
-    synced = 0
-    failed = 0
-    for repo in sorted(repos):
-        try:
-            body = build_repo_body(repo)
-            ensure_page(
-                title=repo,
-                space_id=space_id,
-                parent_id=l3["id"],
-                body=body,
-            )
-            synced += 1
-        except SystemExit as e:
-            print(f"  [FAILED]  {repo} — {e}")
-            failed += 1
+    if do_l1:
+        sync_l1(space_id, run1["id"])
 
-    print()
-    print("=" * 60)
-    print(f"Synced : {synced}   Failed : {failed}")
+    if do_l2:
+        sync_l2(space_id, run1["id"])
+
+    if repos_l3:
+        total_failures += sync_l3(space_id, run1["id"], repos_l3)
+
+    print("\n" + "=" * 60)
+    print("Sync complete." if total_failures == 0 else f"Sync finished with {total_failures} failure(s).")
     print("=" * 60)
 
-    if failed:
+    if total_failures:
         sys.exit(1)
 
 
