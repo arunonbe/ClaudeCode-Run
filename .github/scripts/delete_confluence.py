@@ -27,7 +27,6 @@ TOKEN     = os.environ["ATLASSIAN_API_TOKEN"]
 FOLDER_ID = os.environ.get("CONFLUENCE_FOLDER_ID", "")
 SPACE_KEY = "OT"
 CREATOR_ACCOUNT_ID = "712020:33194315-7530-42e5-9263-95eb904f0f8e"
-CREATED_FROM       = "2026-05-11"
 
 BASE_URL  = f"https://{DOMAIN}/wiki/api/v2"
 WIKI_BASE = f"https://{DOMAIN}/wiki"
@@ -138,8 +137,7 @@ def find_all_by_creator(space_id: str) -> list:
     cql = (
         f'space.key = "{SPACE_KEY}" '
         f'AND creator = "{CREATOR_ACCOUNT_ID}" '
-        f'AND type = "page" '
-        f'AND created >= "{CREATED_FROM}"'
+        f'AND type = "page"'
     )
     while True:
         r = requests.get(
