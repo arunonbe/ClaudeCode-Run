@@ -1,4 +1,4 @@
-# DS_DB_GP_dynamics — DevOps / Operations View
+﻿# DS_DB_GP_dynamics — DevOps / Operations View
 
 ## 1. Build System
 
@@ -40,7 +40,7 @@ The `dynamics.sqlproj` file is 322 KB, indicating a very large SSDT project with
 ## 4. User Provisioning Process
 
 Based on the Security folder contents, the user provisioning process for GP DYNAMICS is:
-1. A new SQL login is created (`CREATE LOGIN [userid] WITH PASSWORD = N'...'` in individual security `.sql` files — see Section 5 for critical finding).
+1. A new SQL login is created (`CREATE LOGIN [userid] WITH PASSWORD = N'[REDACTED — rotate immediately]'` in individual security `.sql` files — see Section 5 for critical finding).
 2. The user is added to `DYNGRP` role membership via `EXECUTE sp_addrolemember`.
 3. The `DYNGRP.sql` file shows ~90 named user accounts in the role as of the last commit.
 
@@ -76,7 +76,7 @@ The presence of **Windows Authentication logins** (`FROM WINDOWS WITH DEFAULT_LA
 
 | Risk | Severity | Detail |
 |------|----------|--------|
-| Plaintext passwords in Security `.sql` files | Critical | `gplain.sql`, `crystal.sql`, `ISAUser.sql`, `report.sql` contain `CREATE LOGIN ... WITH PASSWORD = N'...'` — credentials committed to version control. Immediate rotation and removal from repo required. |
+| Plaintext passwords in Security `.sql` files | Critical | `gplain.sql`, `crystal.sql`, `ISAUser.sql`, `report.sql` contain `CREATE LOGIN ... WITH PASSWORD = N'[REDACTED — rotate immediately]'` — credentials committed to version control. Immediate rotation and removal from repo required. |
 | GP standard schema + custom objects in same DACPAC | High | DACPAC deployment could inadvertently drop or modify GP-standard tables needed by the GP runtime application. |
 | `amAutoGrant` dynamic SQL | High | `CREATE PROCEDURE amAutoGrant @tablename ... EXEC (@command)` — table name is passed as a parameter and concatenated into a SQL string. An injection of a crafted table name could execute arbitrary SQL. |
 | No CI/CD pipeline | High | Manual deployments to production ERP without automated regression or rollback capability. |

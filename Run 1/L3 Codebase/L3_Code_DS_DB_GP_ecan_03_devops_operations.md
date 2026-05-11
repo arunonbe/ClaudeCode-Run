@@ -1,4 +1,4 @@
-# DS_DB_GP_ecan — DevOps / Operations View
+﻿# DS_DB_GP_ecan — DevOps / Operations View
 
 ## 1. Build System
 
@@ -44,14 +44,14 @@ Based on the broader Onbe platform context, deployment is likely performed manua
 ## 4. Security File Pattern
 
 The `Security/` folder contains ~220 SQL files. The pattern observed:
-- `{loginid}.sql` — `CREATE LOGIN [...] WITH PASSWORD = N'...'` or `FROM WINDOWS WITH DEFAULT_LANGUAGE`
+- `{loginid}.sql` — `CREATE LOGIN [...] WITH PASSWORD = N'[REDACTED — rotate immediately]'` or `FROM WINDOWS WITH DEFAULT_LANGUAGE`
 - `{loginid}_1.sql` — `CREATE USER [{loginid}] FOR LOGIN [{loginid}]` or `CREATE USER [{loginid}] WITHOUT LOGIN`
 
 This paired naming convention means each principal has two files: one for the server-level login, one for the database-level user. The `_1.sql` files create the database user; the `.sql` files create the login.
 
 **Security observations**:
 - `DYNSA.sql` — `CREATE USER [DYNSA] WITHOUT LOGIN` — DYNSA is a GP-internal user without a login, used for GP system operations.
-- `crystal.sql` — `CREATE LOGIN [crystal] WITH PASSWORD = N'Wkokvfts{usvf!fg{#{etxtemsFT7_&#$!~<&e;Q{crxmasf'` — **plaintext credential, different password from the dynamics repo** — indicating per-database unique passwords, but still plaintext in source control.
+- `crystal.sql` — `CREATE LOGIN [crystal] WITH PASSWORD = N'[REDACTED — rotate immediately]'` — **plaintext credential, different password from the dynamics repo** — indicating per-database unique passwords, but still plaintext in source control.
 - `Banker_execute` role — `EXEC sp_addrolemember ... 'NAM\PROD'` — the production domain account has Banker execute permission.
 - `NAM_PAAPRDDFINSPVC.sql`, `NAM_PPA_PRD_FinSVC.sql` — Finance Service Windows Authentication login.
 - `ordersvc.sql`, `raf.sql` — Order Service and Refer-a-Friend service logins.

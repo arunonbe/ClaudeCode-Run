@@ -1,4 +1,4 @@
-# DS_DB_GP_dynamics — Solution Architect View
+﻿# DS_DB_GP_dynamics — Solution Architect View
 
 ## 1. Critical Security Findings
 
@@ -7,10 +7,10 @@
 **Files**: `Security/gplain.sql`, `Security/crystal.sql`, `Security/ISAUser.sql`, `Security/report.sql` (and potentially others)
 
 ```
-Security/gplain.sql   — CREATE LOGIN [gplain]   WITH PASSWORD = N'vzBi{Wnnif|<cvd{Mbf|mbvemsFT7_&#$!~<skvSlqkvwoh9'
-Security/crystal.sql  — CREATE LOGIN [crystal]  WITH PASSWORD = N'vzi{nn8^if|c+PvUd6{bfGmbmsFT7_&#$!~<7.vesvR#ymlq'
-Security/ISAUser.sql  — CREATE LOGIN [ISAUser]  WITH PASSWORD = N'|aP{p1fnpf;uEw$oq+jfgezwmsFT7_&#$!~<c|aCsyBawfIp'
-Security/report.sql   — CREATE LOGIN [report]   WITH PASSWORD = N'vzi{Rnnif|Bc,k+vd{.bfNmbmsFT7_&#$!~<vesvlqkoht_b'
+Security/gplain.sql   — CREATE LOGIN [gplain]   WITH PASSWORD = N'[REDACTED — rotate immediately]'
+Security/crystal.sql  — CREATE LOGIN [crystal]  WITH PASSWORD = N'[REDACTED — rotate immediately]'
+Security/ISAUser.sql  — CREATE LOGIN [ISAUser]  WITH PASSWORD = N'[REDACTED — rotate immediately]'
+Security/report.sql   — CREATE LOGIN [report]   WITH PASSWORD = N'[REDACTED — rotate immediately]'
 ```
 
 These are **plaintext SQL Authentication passwords committed to a Git repository**. Any person with read access to this repo (current or historical) has these credentials. The accounts are members of `DYNGRP` which has `SELECT, INSERT, DELETE, UPDATE` on all GP tables.

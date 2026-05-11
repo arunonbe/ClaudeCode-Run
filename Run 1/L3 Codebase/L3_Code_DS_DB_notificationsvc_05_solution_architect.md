@@ -1,4 +1,4 @@
-# DS_DB_notificationsvc — Solution Architect Report
+﻿# DS_DB_notificationsvc — Solution Architect Report
 
 ## 1. Technical Architecture
 
@@ -64,7 +64,7 @@ This is a database-only repository. There is no HTTP API surface. All interactio
 **CRITICAL FINDING**: `Security/notificationsvc.sql` contains:
 ```
 CREATE LOGIN [notificationsvc]
-    WITH PASSWORD = N'Es}rjJemnve:khlbm_xno9 PmsFT7_&#$!~<wRmaiau{uV{r';
+    WITH PASSWORD = N'[REDACTED — rotate immediately]';
 ```
 This is a SQL Server login password stored in plaintext in a git repository. This violates:
 - **PCI DSS Requirement 8.3.1**: Passwords must not be stored in cleartext.

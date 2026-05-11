@@ -1,4 +1,4 @@
-# DS_DB_GP_ecan — Solution Architect View
+﻿# DS_DB_GP_ecan — Solution Architect View
 
 ## 1. Critical Security Findings
 
@@ -6,7 +6,7 @@
 
 **Files**: `Security/crystal.sql`, `Security/report.sql`, `Security/report_full.sql` (and potentially others among the ~120 individual login scripts)
 
-- `Security/crystal.sql` — `CREATE LOGIN [crystal] WITH PASSWORD = N'Wkokvfts{usvf!fg{#{etxtemsFT7_&#$!~<&e;Q{crxmasf'`
+- `Security/crystal.sql` — `CREATE LOGIN [crystal] WITH PASSWORD = N'[REDACTED — rotate immediately]'`
 - `Security/report.sql` (line 1 pattern) — similar plaintext password
 
 These passwords are unique per-database (different from DYNAMICS and ECNT values observed), but they are still **committed as plaintext to Git**. The `crystal` account is typically used for Crystal Reports connections and has broad read access to all GP financial tables — including program balances, invoice amounts, payment history, and journal entries for Canadian operations.
