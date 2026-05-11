@@ -1,0 +1,35 @@
+name: Delete All Pages from Confluence
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type DELETE to confirm removal of all Run 1 pages from Confluence'
+        required: true
+        default: ''
+
+jobs:
+  delete-confluence:
+    name: Delete Run 1 pages from Confluence
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirm == 'DELETE' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Delete all Confluence pages under Run 1
+        env:
+          ATLASSIAN_DOMAIN:     ${{ secrets.ATLASSIAN_DOMAIN }}
+          ATLASSIAN_EMAIL:      ${{ secrets.ATLASSIAN_EMAIL }}
+          ATLASSIAN_API_TOKEN:  ${{ secrets.ATLASSIAN_API_TOKEN }}
+          CONFLUENCE_FOLDER_ID: ${{ secrets.CONFLUENCE_FOLDER_ID }}
+        run: python .github/scripts/delete_confluence.py --yes
