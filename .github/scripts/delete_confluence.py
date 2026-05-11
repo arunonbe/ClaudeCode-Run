@@ -132,37 +132,39 @@ def run_by_parent(space_id: str, auto_yes: bool):
 # ---------------------------------------------------------------------------
 
 def find_all_by_creator(space_id: str) -> list:
-    """Return all pages created by CREATOR_ACCOUNT_ID on/after CREATED_FROM."""
-    pages, start = [], 0
-    cql = (
-        f'space.key = "{SPACE_KEY}" '
-        f'AND creator = "{CREATOR_ACCOUNT_ID}" '
-        f'AND type = "page"'
-    )
+    """Return all pages in the OT space authored by CREATOR_ACCOUNT_ID (v2 API)."""
+    if not space_id:
+        space_id = get_space_id()
+    pages, cursor = [], None
     while True:
+        params = {"space-id": space_id, "status": "current", "limit": 250}
+        if cursor:
+            params["cursor"] = cursor
         r = requests.get(
-            f"{WIKI_BASE}/rest/api/search",
-            params={"cql": cql, "limit": 200, "start": start},
-            auth=AUTH, headers=HEADERS
+            f"{BASE_URL}/pages",
+            params=params, auth=AUTH, headers=HEADERS
         )
         r.raise_for_status()
         data = r.json()
         results = data.get("results", [])
-        for item in results:
-            c = item.get("content", {})
-            if c.get("id") and c.get("title"):
-                pages.append({"id": c["id"], "title": c["title"]})
-        total = data.get("totalSize", 0)
-        start += len(results)
-        print(f"  Fetched {start}/{total} pages...")
-        if start >= total or not results:
+        matched = [
+            {"id": p["id"], "title": p["title"]}
+            for p in results
+            if p.get("authorId") == CREATOR_ACCOUNT_ID
+        ]
+        pages.extend(matched)
+        print(f"  Scanned {len(results)} pages, {len(matched)} matched, {len(pages)} total...")
+        next_url = data.get("_links", {}).get("next")
+        if not next_url:
             break
+        cursor = next_url.split("cursor=")[-1].split("&")[0]
     return pages
 
 
 def run_by_creator(auto_yes: bool):
     print("Searching for all analysis pages by creator...\n")
-    pages = find_all_by_creator(None)
+    space_id = get_space_id()
+    pages = find_all_by_creator(space_id)
 
     if not pages:
         print("No pages found. Nothing to delete.")
