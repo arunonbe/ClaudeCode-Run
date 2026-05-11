@@ -5,6 +5,12 @@ on:
     branches: [main]
     paths:
       - 'Run 1/L3 Codebase/**.md'
+  workflow_dispatch:
+    inputs:
+      sync_all:
+        description: 'Sync all 363 repos (leave blank to sync only changed files)'
+        required: false
+        default: 'true'
 
 jobs:
   confluence-sync:
@@ -28,13 +34,17 @@ jobs:
       - name: Detect changed L3 Codebase files
         id: changes
         run: |
-          if git rev-parse HEAD~1 > /dev/null 2>&1; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "files=" >> $GITHUB_OUTPUT
+            echo "Manual trigger — syncing all repos"
+          elif git rev-parse HEAD~1 > /dev/null 2>&1; then
             FILES=$(git diff --name-only HEAD~1 HEAD -- 'Run 1/L3 Codebase/' | tr '\n' ' ')
+            echo "files=$FILES" >> $GITHUB_OUTPUT
+            echo "Changed files: $FILES"
           else
-            FILES=$(git ls-files 'Run 1/L3 Codebase/*.md' | tr '\n' ' ')
+            echo "files=" >> $GITHUB_OUTPUT
+            echo "First commit — syncing all repos"
           fi
-          echo "files=$FILES" >> $GITHUB_OUTPUT
-          echo "Changed files: $FILES"
 
       - name: Sync to Confluence
         env:
