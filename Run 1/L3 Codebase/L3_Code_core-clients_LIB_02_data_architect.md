@@ -47,10 +47,10 @@ No DDL or ORM mapping exists within this repository. The data models that this l
 ### Profile
 - `ProfileClassKey` — class name + optional qualifiers
 - `ProfileClassTopic` — scope descriptor (`"global"` or `"member"`)
-- `ClassPut` input: `agent`, `member`, `memo`, `topic`, `key`, `operation` (one of `"create"`, `"update"`, `"create-update"`), `values` (Map<String,Object>)
+- `ClassPut` input: `agent`, `member`, `memo`, `topic`, `key`, `operation` (one of `"create"`, `"update"`, `"create-update"`), `values` (`Map<String,Object>`)
 
 ### Security / User Provisioning
-- `BulkUserRecord` fields: `record_action`, `program_id`, `user_name`, `account_status`, `role_group` (Integer), `password_status`, `password` (String plaintext), `notification_code`, `registration` (UserRegistrationInfo), `locations` (List<Location>), `promotions` (List<Promotion>)
+- `BulkUserRecord` fields: `record_action`, `program_id`, `user_name`, `account_status`, `role_group` (Integer), `password_status`, `password` (String plaintext), `notification_code`, `registration` (UserRegistrationInfo), `locations` (`List<Location>`), `promotions` (`List<Promotion>`)
 - `UserRegistrationInfo` fields: `first_name`, `middle_name`, `last_name`, `suffix_name`, `home_email`, `address1`, `address2`, `city`, `state`, `postal`, `country`, `home_phone`, `business_phone`, `mobile_phone`
 
 ### Order
@@ -63,7 +63,7 @@ No DDL or ORM mapping exists within this repository. The data models that this l
 
 ### Director
 - `GetInput.key` (String, e.g. `"System\DataCredentials\B2CTEST"`)
-- `GetOutput.value` (Map<String,Object>) — recursive key-value tree
+- `GetOutput.value` (`Map<String,Object>`) — recursive key-value tree
 
 ## Sensitive Data Handling
 

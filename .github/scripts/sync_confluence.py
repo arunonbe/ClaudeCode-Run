@@ -197,13 +197,20 @@ def ensure_page(title: str, space_id: str, parent_id: str, body: str) -> dict:
 
 # Regex to strip class/lang attributes that some Confluence editors reject
 _CODE_CLASS_RE = re.compile(r'<code\s+class="[^"]*">', re.IGNORECASE)
+# Regex to escape Java/generic type angle brackets like <Location>, <String,Object>
+# that the markdown parser treats as raw HTML, producing invalid XML for Confluence.
+# HTML tags are always lowercase; Java type names start with an uppercase letter.
+_JAVA_GENERIC_RE = re.compile(r'<([A-Z][^<>]*)>')
 
 
 def sanitize_storage(html_body: str) -> str:
     """Remove attributes from <code> tags, replace box-drawing / arrow characters,
-    and escape ALL curly braces so Confluence does not treat {macro} syntax as macros."""
+    escape Java generic types, and escape ALL curly braces."""
     # Strip class attribute from <code class="..."> tags
     cleaned = _CODE_CLASS_RE.sub("<code>", html_body)
+    # Escape Java generic type patterns, e.g. <String,Object>, <Location>, <T>
+    # These are passed through as raw HTML by the markdown parser but are invalid XML.
+    cleaned = _JAVA_GENERIC_RE.sub(lambda m: f"&lt;{m.group(1)}&gt;", cleaned)
     # Replace Unicode box-drawing characters with ASCII equivalents.
     # Note: ← is handled via str.replace below because "<-" is invalid XML in text content.
     box_map = str.maketrans({
