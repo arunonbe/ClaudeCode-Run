@@ -1,0 +1,46 @@
+name: Sync L3 Codebase to Confluence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Run 1/L3 Codebase/**.md'
+
+jobs:
+  confluence-sync:
+    name: Sync changed repos to Confluence
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests markdown
+
+      - name: Detect changed L3 Codebase files
+        id: changes
+        run: |
+          if git rev-parse HEAD~1 > /dev/null 2>&1; then
+            FILES=$(git diff --name-only HEAD~1 HEAD -- 'Run 1/L3 Codebase/' | tr '\n' ' ')
+          else
+            FILES=$(git ls-files 'Run 1/L3 Codebase/*.md' | tr '\n' ' ')
+          fi
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+          echo "Changed files: $FILES"
+
+      - name: Sync to Confluence
+        env:
+          ATLASSIAN_DOMAIN:     ${{ secrets.ATLASSIAN_DOMAIN }}
+          ATLASSIAN_EMAIL:      ${{ secrets.ATLASSIAN_EMAIL }}
+          ATLASSIAN_API_TOKEN:  ${{ secrets.ATLASSIAN_API_TOKEN }}
+          CONFLUENCE_FOLDER_ID: ${{ secrets.CONFLUENCE_FOLDER_ID }}
+        run: |
+          python .github/scripts/sync_confluence.py ${{ steps.changes.outputs.files }}
