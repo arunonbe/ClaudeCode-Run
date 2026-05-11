@@ -4,13 +4,21 @@ on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: 'Type DELETE to confirm removal of all Run 1 pages from Confluence'
+        description: 'Type DELETE to confirm'
         required: true
         default: ''
+      mode:
+        description: 'by-parent = delete Run 1 tree | by-creator = delete all orphaned pages'
+        required: true
+        default: 'by-creator'
+        type: choice
+        options:
+          - by-creator
+          - by-parent
 
 jobs:
   delete-confluence:
-    name: Delete Run 1 pages from Confluence
+    name: Delete Confluence pages
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.confirm == 'DELETE' }}
 
@@ -26,10 +34,15 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Delete all Confluence pages under Run 1
+      - name: Delete Confluence pages
         env:
           ATLASSIAN_DOMAIN:     ${{ secrets.ATLASSIAN_DOMAIN }}
           ATLASSIAN_EMAIL:      ${{ secrets.ATLASSIAN_EMAIL }}
           ATLASSIAN_API_TOKEN:  ${{ secrets.ATLASSIAN_API_TOKEN }}
           CONFLUENCE_FOLDER_ID: ${{ secrets.CONFLUENCE_FOLDER_ID }}
-        run: python .github/scripts/delete_confluence.py --yes
+        run: |
+          MODE_FLAG=""
+          if [ "${{ github.event.inputs.mode }}" = "by-creator" ]; then
+            MODE_FLAG="--by-creator"
+          fi
+          python .github/scripts/delete_confluence.py $MODE_FLAG --yes
